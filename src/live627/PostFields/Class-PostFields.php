@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * @package PostFields
+ * @version 2.0
+ * @author John Rayes <live627@gmail.com>
+ * @copyright Copyright (c) 2011-2016, John Rayes
+ * @license http://opensource.org/licenses/ISC ISC
+ */
+
+namespace live627\PostFields;
+
+if (!defined('SMF')) {
+	die('Hacking attempt...');
+}
+
 interface postFields
 {
 	/*
