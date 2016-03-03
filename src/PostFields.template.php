@@ -49,8 +49,11 @@ function template_edit()
 
 	foreach ($context['boards'] as $id_board => $board_link)
 		echo '
-								<input type="checkbox" name="boards[', $id_board, ']"', in_array($id_board, $context['field']['boards']) ? ' checked' : '', '>
-								', $board_link, '<br />';
+								<label>
+									<input type="checkbox" name="boards[', $id_board, ']"', in_array($id_board, $context['field']['boards']) ? ' checked' : '', '>
+									', $board_link, '
+								</label>
+								<br />';
 
 	echo '
 							</div>
@@ -61,10 +64,15 @@ function template_edit()
 						<dd>
 							<div class="information">';
 
-	foreach ($context['groups'] as $id_group => $group_link)
+	foreach ($context['groups'] as $group)
 		echo '
-								<input type="checkbox" name="groups[', $id_group, ']"', in_array($id_group, $context['field']['groups']) ? ' checked' : '', '>
-								', $group_link, '<br />';
+								<label>
+									<input type="checkbox" name="groups[', $group['id'], ']"', $group['id'] ? ' checked' : '', '>
+									<span', $group['is_post_group'] ? ' class="post_group" title="' . $txt['mboards_groups_post_group'] . '"' : ($group['id'] == 0 ? ' class="regular_members" title="' . $txt['mboards_groups_regular_members'] . '"' : ''), ($group['color'] ? ' style="color: ' . $group['color'] . '"' : ''), '>
+										', $group['name'], '
+									</span>
+								</label>
+								<br />';
 
 	echo '
 							</div>
