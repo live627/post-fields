@@ -1,7 +1,7 @@
 <?php
 
-$txt['post_fields'] = 'Post Fields';
-$txt['post_fields_desc'] = 'All of your post fields are shown here.';
+$txt['PostFields'] = 'Post Fields';
+$txt['PostFields_desc'] = 'All of your post fields are shown here.';
 $txt['pf_menu_index'] = 'List Current Fields';
 $txt['pf_menu_edit'] = 'Add a New Field';
 $txt['pf_add'] = 'Add';

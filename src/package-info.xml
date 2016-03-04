@@ -4,23 +4,23 @@
 	<id>live627:post_fields</id>
 	<name>Post Fields</name>
 	<type>modification</type>
-	<version>1.0</version>
+	<version>2.0</version>
 
 	<install for="2.0 - 2.0.99">
+        <code>check.php</code>
+        <code>add_remove_hooks.php</code>
 		<database>install.php</database>
 		<modification>install.xml</modification>
-		<require-file name="Class-PostFields.php" destination="$sourcedir" />
-		<require-file name="PostFields.php" destination="$sourcedir" />
+		<require-dir name="PostFields" destination="$sourcedir" />
 		<require-file name="PostFields.template.php" destination="$themedir" />
 		<require-file name="postfieldsadmin.js" destination="$themedir/scripts" />
 		<require-file name="PostFields.english.php" destination="$languagedir" />
 	</install>
 
 	<uninstall for="2.0 - 2.0.99">
-		<code>uninstall-required.php</code>
+        <code>add_remove_hooks.php</code>
 		<modification reverse="true">install.xml</modification>
-		<remove-file name="$sourcedir/Class-PostFields.php" />
-		<remove-file name="$sourcedir/PostFields.php" />
+		<remove-dir name="$sourcedir/PostFields" />
 		<remove-file name="$themedir/scripts/postfieldsadmin.js" />
 		<remove-file name="$themedir/PostFields.template.php" />
 		<remove-file name="$languagedir/PostFields.english.php" />
