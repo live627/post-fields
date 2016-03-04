@@ -251,8 +251,8 @@ class Forms
 		global $txt, $scripturl, $context, $settings, $smcFunc;
 
 		$context['fid'] = isset($_REQUEST['fid']) ? (int) $_REQUEST['fid'] : 0;
-		$context['page_title'] = $txt['post_fields'] . ' - ' . ($context['fid'] ? $txt['pf_title'] : $txt['pf_add']);
-		$context['page_title2'] = $txt['post_fields'] . ' - ' . ($context['fid'] ? $txt['pf_title'] : $txt['pf_add']);
+		$context['page_title'] = $txt['PostFields'] . ' - ' . ($context['fid'] ? $txt['pf_title'] : $txt['pf_add']);
+		$context['page_title2'] = $txt['PostFields'] . ' - ' . ($context['fid'] ? $txt['pf_title'] : $txt['pf_add']);
 		$context['html_headers'] .= '<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/postfieldsadmin.js"></script>';
 		loadTemplate('PostFields');
 

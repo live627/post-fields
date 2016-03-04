@@ -22,7 +22,7 @@ class Integration
 
 		loadLanguage('PostFields');
 		$admin_areas['layout']['areas']['postfields'] = array(
-			'label' => $txt['post_fields'],
+			'label' => $txt['PostFields'],
 			'icon' => 'settings.gif',
 			'function' => function() { \live627\PostFields\Dispatcher::getInstance(); },
 			'subsections' => array(
