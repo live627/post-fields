@@ -342,7 +342,7 @@ class Admin
 				'mask' => '',
 				'regex' => '',
 				'boards' => array(),
-				'groups' => array(),
+				'groups' => [-3],
 			);
 
 		$context['groups'] = $this->repository->list_groups($context['field']['groups']);
