@@ -15,7 +15,7 @@ if (!defined('SMF')) {
 	die('Hacking attempt...');
 }
 
-class PostFields extends \Suki\Ohara
+class Util extends \Suki\Ohara
 {
 	public $name = __CLASS__;
 	protected static $_activity = array();
