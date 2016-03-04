@@ -7,6 +7,7 @@
  * @copyright Copyright (c) 2011-2016, John Rayes
  * @license http://opensource.org/licenses/ISC ISC
  */
+ 
 if (file_exists(__DIR__ . '/SSI.php') && !defined('SMF')) {
 	$ssi = true;
 	require_once(__DIR__ . '/SSI.php');
