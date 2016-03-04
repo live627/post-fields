@@ -103,10 +103,10 @@ class Forms
 			'no_items_label' => $txt['pf_none'],
 			'items_per_page' => 25,
 			'get_items' => array(
-				'function' => 'list_getPostFields',
+				'function' => ['live627\PostFields\Admin', 'list_getPostFields'],
 			),
 			'get_count' => array(
-				'function' => 'list_getPostFieldSize',
+				'function' => ['live627\PostFields\Admin', 'list_getPostFieldSize'],
 			),
 			'columns' => array(
 				'name' => array(
@@ -490,41 +490,41 @@ class Forms
 			redirectexit('action=admin;area=postfields');
 		}
 	}
-}
 
-function list_getPostFields($start, $items_per_page, $sort)
-{
-	global $smcFunc;
+	function list_getPostFields($start, $items_per_page, $sort)
+	{
+		global $smcFunc;
 
-	$list = array();
-	$request = $smcFunc['db_query']('', '
-		SELECT id_field, name, description, type, bbc, active, can_search
-		FROM {db_prefix}message_fields
-		ORDER BY {raw:sort}
-		LIMIT {int:start}, {int:items_per_page}',
-		array(
-			'sort' => $sort,
-			'start' => $start,
-			'items_per_page' => $items_per_page,
-		)
-	);
-	while ($row = $smcFunc['db_fetch_assoc']($request))
-		$list[] = $row;
-	$smcFunc['db_free_result']($request);
+		$list = array();
+		$request = $smcFunc['db_query']('', '
+			SELECT id_field, name, description, type, bbc, active, can_search
+			FROM {db_prefix}message_fields
+			ORDER BY {raw:sort}
+			LIMIT {int:start}, {int:items_per_page}',
+			array(
+				'sort' => $sort,
+				'start' => $start,
+				'items_per_page' => $items_per_page,
+			)
+		);
+		while ($row = $smcFunc['db_fetch_assoc']($request))
+			$list[] = $row;
+		$smcFunc['db_free_result']($request);
 
-	return $list;
-}
+		return $list;
+	}
 
-function list_getPostFieldSize()
-{
-	global $smcFunc;
+	function list_getPostFieldSize()
+	{
+		global $smcFunc;
 
-	$request = $smcFunc['db_query']('', '
-		SELECT COUNT(*)
-		FROM {db_prefix}message_fields');
+		$request = $smcFunc['db_query']('', '
+			SELECT COUNT(*)
+			FROM {db_prefix}message_fields');
 
-	list ($numProfileFields) = $smcFunc['db_fetch_row']($request);
-	$smcFunc['db_free_result']($request);
+		list ($numProfileFields) = $smcFunc['db_fetch_row']($request);
+		$smcFunc['db_free_result']($request);
 
-	return $numProfileFields;
+		return $numProfileFields;
+	}
 }
