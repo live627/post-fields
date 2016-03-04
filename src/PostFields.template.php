@@ -103,7 +103,7 @@ function template_edit()
 							<br /><span class="smalltext">', $txt['pf_max_length_desc'], '</span>
 						</dt>
 						<dd id="max_length_dd">
-							<input type="text" name="length" value="', $context['field']['length'], '" size="7" maxlength="6">
+							<input type="text" name="lengt" value="', $context['field']['length'], '" size="7" maxlength="6">
 						</dd>
 						<dt id="dimension_dt">
 							<strong>', $txt['pf_dimension'], ':</strong>

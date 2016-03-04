@@ -367,7 +367,7 @@ class Admin
 
 			$mask = isset($_POST['mask']) ? $_POST['mask'] : '';
 			$regex = isset($_POST['regex']) ? $_POST['regex'] : '';
-			$length = isset($_POST['length']) ? (int) $_POST['length'] : 255;
+			$length = isset($_POST['lengt']) ? (int) $_POST['lengt'] : 255;
 			$groups = !empty($_POST['groups']) ? implode(',', array_keys($_POST['groups'])) : '';
 			$boards = !empty($_POST['boards']) ? implode(',', array_keys($_POST['boards'])) : '';
 
