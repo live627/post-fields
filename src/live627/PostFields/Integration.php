@@ -87,7 +87,7 @@ class Integration
 			if (isset($values[$field['id_field']]))
 				$value = $values[$field['id_field']];
 			$exists = !empty($value);
-			$context['fields'][] = rennder_field($field, $value, $exists);
+			$context['fields'][] = (new Util)->renderField($field, $value, $exists);
 		}
 	}
 
@@ -95,7 +95,8 @@ class Integration
 	{
 		global $board, $context, $options, $user_info;
 
-		pf_load_fields(get_post_fields_filtered($board));
+		$util = new Util();
+		self::load_fields($util->filterFields($board));
 		loadLanguage('PostFields');
 		loadTemplate('PostFields');
 		$context['is_post_fields_collapsed'] = $user_info['is_guest'] ? !empty($_COOKIE['postFields']) : !empty($options['postFields']);
@@ -105,7 +106,7 @@ class Integration
 	{
 		global $board, $context, $smcFunc, $topic, $user_info;
 
-		$field_list = get_post_fields_filtered($board);
+		$field_list = (new Util)->filterFields($board);
 		$changes = $log_changes = array();
 		$_POST['icon'] = 'xx';
 
@@ -193,7 +194,6 @@ class Integration
 	{
 		global $board, $context, $sourcedir, $smcFunc, $topic;
 
-		// $context['post_error']['no_subject'] = false;
 		foreach ($post_errors as $id => $post_error)
 			if ($post_error == 'no_message')
 				unset($post_errors[$id]);
@@ -201,7 +201,7 @@ class Integration
 		if (isset($_POST['postfield']))
 			$_POST['postfield'] = htmlspecialchars__recursive($_POST['postfield']);
 
-		$field_list = get_post_fields_filtered($board);
+		$field_list = (new Util)->filterFields($board);
 		require_once($sourcedir . '/Class-PostFields.php');
 		loadLanguage('PostFields');
 
@@ -236,7 +236,7 @@ class Integration
 
 	public static function remove_message($message, $decreasePostCount)
 	{
-		pf_remove_messages($message, $decreasePostCount);
+		self::remove_messages($message, $decreasePostCount);
 	}
 
 	public static function remove_messages($message, $decreasePostCount)
@@ -272,7 +272,7 @@ class Integration
 		$smcFunc['db_free_result']($request);
 
 		if (!empty($messages))
-			pf_remove_messages($messages, $decreasePostCount);
+			self::remove_messages($messages, $decreasePostCount);
 	}
 
 	public static function display_topics($topic_ids)
@@ -297,14 +297,15 @@ class Integration
 		$smcFunc['db_free_result']($request);
 
 		if (!empty($messages))
-			pf_display_message_list($messages, true);
+			self::display_message_list($messages, true);
 	}
 
 	public static function display_message_list($messages, $is_message_index = false)
 	{
 		global $board, $context, $smcFunc;
 
-		$field_list = get_post_fields_filtered($board, $is_message_index);
+		$util = new Util();
+		$field_list = $util->filterFields($board, $is_message_index);
 
 		if (empty($field_list))
 			return;
@@ -325,7 +326,7 @@ class Integration
 			$exists = isset($row['value']);
 			$value = $exists ? $row['value'] : '';
 
-			$context['fields'][$row['id_msg']][$row['id_field']] = rennder_field($field_list[$row['id_field']], $value, $exists);
+			$context['fields'][$row['id_msg']][$row['id_field']] = $util->renderField($field_list[$row['id_field']], $value, $exists);
 		}
 		$smcFunc['db_free_result']($request);
 

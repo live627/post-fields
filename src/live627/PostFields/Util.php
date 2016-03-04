@@ -56,11 +56,11 @@ class Util extends \Suki\Ohara
 		return $list;
 	}
 
-	function get_post_fields_filtered($board, $is_message_index = false)
+	function filterFields($board, $is_message_index = false)
 	{
 		global $context, $user_info;
 
-		$fields = total_getPostFields();
+		$fields = $this->total_getPostFields();
 		$list = array();
 		foreach ($fields as $field)
 		{
@@ -79,7 +79,7 @@ class Util extends \Suki\Ohara
 		return $list;
 	}
 
-	function rennder_field($field, $value, $exists)
+	function renderField($field, $value, $exists)
 	{
 		global $scripturl, $settings, $sourcedir;
 
