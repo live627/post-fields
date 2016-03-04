@@ -45,7 +45,9 @@ function template_edit()
 							<strong>', $txt['pf_boards'], ':</strong>
 						</dt>
 						<dd>
-							<div class="information">';
+							<div class="information">
+								<label>
+									<input type="checkbox" class="input_check" onclick="invertAll(this, this.form, \'boards\');"', $context['all_boards_checked'] ? ' checked="checked"' : '', ' /> <em>', $txt['check_all'], '</em></label><br />';
 
 	foreach ($context['boards'] as $id_board => $board_link)
 		echo '
@@ -62,7 +64,9 @@ function template_edit()
 							<strong>', $txt['pf_groups'], ':</strong>
 						</dt>
 						<dd>
-							<div class="information">';
+							<div class="information">
+								<label>
+									<input type="checkbox" class="input_check" onclick="invertAll(this, this.form, \'groups\');"', $context['all_groups_checked'] ? ' checked="checked"' : '', ' /> <em>', $txt['check_all'], '</em></label><br />';
 
 	foreach ($context['groups'] as $group)
 		echo '

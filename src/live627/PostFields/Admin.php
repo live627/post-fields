@@ -346,6 +346,11 @@ class Admin
 			);
 
 		$context['groups'] = $this->repository->list_groups($context['field']['groups']);
+		$context['all_groups_checked'] = empty(array_diff_key($context['groups'], array_filter($context['groups'], function ($group) {
+			return $group['checked'];
+		})));
+		$context['all_boards_checked'] = empty(array_diff(array_keys($context['boards']), $context['field']['boards']));
+
 		// Are we saving?
 		if (isset($_POST['save']))
 		{
