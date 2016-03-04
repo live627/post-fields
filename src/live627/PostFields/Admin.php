@@ -17,11 +17,11 @@ if (!defined('SMF')) {
 
 class Admin
 {
-	private $repository;
+	private $util;
 
 	public function __construct()
 	{
-		$this->repository = new PostFields();
+		$this->util = new Util();
 	}
 
 	public function Index()
@@ -345,7 +345,7 @@ class Admin
 				'groups' => [-3],
 			);
 
-		$context['groups'] = $this->repository->list_groups($context['field']['groups']);
+		$context['groups'] = $this->util->list_groups($context['field']['groups']);
 		$context['all_groups_checked'] = empty(array_diff_key($context['groups'], array_filter($context['groups'], function ($group) {
 			return $group['checked'];
 		})));
