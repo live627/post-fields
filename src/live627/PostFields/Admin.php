@@ -15,8 +15,15 @@ if (!defined('SMF')) {
 	die('Hacking attempt...');
 }
 
-class Forms
+class Admin
 {
+	private $repository;
+
+	public function __construct()
+	{
+		$this->repository = new PostFields();
+	}
+
 	public function Index()
 	{
 		global $txt, $context, $sourcedir, $smcFunc, $scripturl;
@@ -270,22 +277,6 @@ class Forms
 			$context['boards'][$row['id_board']] = $row['cat_name'] . ' - ' . $row['board_name'];
 		$smcFunc['db_free_result']($request);
 
-		$request = $smcFunc['db_query']('', '
-			SELECT id_group, group_name, online_color
-			FROM {db_prefix}membergroups
-			WHERE min_posts = {int:min_posts}
-				AND id_group != {int:mod_group}
-			ORDER BY group_name',
-			array(
-				'min_posts' => -1,
-				'mod_group' => 3,
-			)
-		);
-		$context['groups'] = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
-			$context['groups'][$row['id_group']] = '<span' . ($row['online_color'] ? ' style="color: ' . $row['online_color'] . '"' : '') . '>' . $row['group_name'] . '</span>';
-		$smcFunc['db_free_result']($request);
-
 		loadLanguage('Profile');
 
 		if ($context['fid'])
@@ -354,6 +345,7 @@ class Forms
 				'groups' => array(),
 			);
 
+		$context['groups'] = $this->repository->list_groups($context['field']['groups']);
 		// Are we saving?
 		if (isset($_POST['save']))
 		{

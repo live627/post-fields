@@ -67,8 +67,8 @@ function template_edit()
 	foreach ($context['groups'] as $group)
 		echo '
 								<label>
-									<input type="checkbox" name="groups[', $group['id'], ']"', $group['id'] ? ' checked' : '', '>
-									<span', $group['is_post_group'] ? ' class="post_group" title="' . $txt['mboards_groups_post_group'] . '"' : ($group['id'] == 0 ? ' class="regular_members" title="' . $txt['mboards_groups_regular_members'] . '"' : ''), ($group['color'] ? ' style="color: ' . $group['color'] . '"' : ''), '>
+									<input type="checkbox" name="groups[', $group['id'], ']"', $group['checked'] ? ' checked' : '', '>
+									<span', $group['is_post_group'] ? ' class="post_group" title="' . $txt['mboards_groups_post_group'] . '"' : ($group['id'] == 0 ? ' class="regular_members" title="' . $txt['mboards_groups_regular_members'] . '"' : ''), $group['color'] ? ' style="color: ' . $group['color'] . '"' : '', '>
 										', $group['name'], '
 									</span>
 								</label>
