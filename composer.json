@@ -17,7 +17,7 @@
 	},
 	"autoload": {
 		"psr-4": {
-			"live627\\": "src/"
+			"live627\\": "src/live627/"
 		}
 	}
 }
