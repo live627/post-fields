@@ -111,6 +111,8 @@ class Test extends \PHPUnit_Framework_TestCase
                     $value = 'live627@gmail.com';
                     case 'float':
                     $value = 6.8;
+                    case 'number':
+                    $value = 6;
                 }
             }
             $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
@@ -125,3 +127,4 @@ class Test extends \PHPUnit_Framework_TestCase
         $this->assertCount(8, $this->Fields);
     }
 }
+0
