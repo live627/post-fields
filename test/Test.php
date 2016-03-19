@@ -14,7 +14,7 @@ class MockPsr4AutoloaderClass
     }
 }
 
-class Psr4AutoloaderClassTest extends \PHPUnit_Framework_TestCase
+class Test extends \PHPUnit_Framework_TestCase
 {
     protected $loader;
 
