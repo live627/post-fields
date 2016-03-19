@@ -22,7 +22,9 @@ class Test extends \PHPUnit_Framework_TestCase
         global $scripturl, $settings, $sourcedir;
 
         // What are you doing here, SMF?
-        define('SMF', 1);
+        if (!defined('SMF')) {
+            define('SMF', 1);
+        }
         $settings['default_images_url'] = '';
         $settings['images_url'] = '';
         $scripturl = '';
@@ -98,6 +100,8 @@ class Test extends \PHPUnit_Framework_TestCase
         {
             if (!isset($field['value'])) {
                 $value = $field['id_field'];
+            } else {
+                $value = $field['value'];
             }
             if ($field['type'] = 'text') {
                 switch ($field['mask']) {
