@@ -1,7 +1,7 @@
 <?php
 
 namespace Tests;
-use live627\PostFields;
+use \live627\PostFields;
 
 class Test extends \PHPUnit_Framework_TestCase
 {
@@ -78,7 +78,7 @@ class Test extends \PHPUnit_Framework_TestCase
         foreach ($this->Fields as $field)
         {
             $field['id_field'] = ++$i;
-            $actual = (new Util)->renderField($field, $value, $exists);
+            $actual = (new Util)->renderField($field, '', false);
             $this->assertSame($field['name'], $actual['name']);
         }
     }
