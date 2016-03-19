@@ -82,4 +82,8 @@ class Test extends \PHPUnit_Framework_TestCase
             $this->assertSame($field['name'], $actual['name']);
         }
     }
+    public function testFieldCount()
+    {
+        $this->assertCount(10, $this->Fields);
+    }
 }
