@@ -17,7 +17,7 @@ class Test extends \PHPUnit_Framework_TestCase
     {
         $in_col = array(
             'name' => 'string', 'type' => 'string', 'size' => 'string', 'options' => 'string', 'active' => 'string', 'default_value' => 'string',
-            'can_search' => 'string', 'groups' => 'string', 'boards' => 'string', 'topic_only' => 'string', 'mi' => 'string', 'mask' => 'string',
+            'can_search' => 'string', 'groups' => 'string', 'boards' => 'string', 'topic_only' => 'string', 'bbc' => 'string', 'mask' => 'string',
         );
         $in_data = array(
             array(
@@ -25,7 +25,7 @@ class Test extends \PHPUnit_Framework_TestCase
                 'no', '1', '1', 'yes', 'no', 'nohtml',
             ),
             array(
-                'When', 'select', 80, 'ASAP,Tomorrow,This Week', 'yes', '',
+                'When', 'select', 80, 'ASAP,Tomorrow,This Week', 'yes', 'Tomorrow',
                 'no', '1', '1', 'yes', 'no', '',
             ),
             array(
@@ -34,27 +34,19 @@ class Test extends \PHPUnit_Framework_TestCase
             ),
             array(
                 '£', 'text', 80, '', 'yes', '',
-                'no', '1', '1', 'yes', 'yes', 'nohtml',
+                'no', '1', '1', 'yes', 'yes', 'float',
             ),
             array(
                 'To', 'text', 80, '', 'yes', '',
-                'no', '1', '1', 'yes', 'yes', 'nohtml',
+                'no', '1', '1', 'yes', 'yes', 'email',
             ),
             array(
                 'From', 'text', 80, '', 'yes', '',
                 'yes', '1', '1', 'yes', 'yes', 'nohtml',
             ),
             array(
-                'To', 'text', 80, '', 'yes', '',
-                'no', '1', '1', 'yes', 'yes', 'nohtml',
-            ),
-            array(
-                'From', 'text', 80, '', 'yes', '',
-                'no', '1', '1', 'yes', 'yes', 'nohtml',
-            ),
-            array(
-                'Add picture', 'text', 80, '', 'yes', '',
-                'no', '1', '1', 'yes', 'no', 'img',
+                '$', 'text', 80, '', 'yes', '',
+                'no', '1', '1', 'yes', 'no', 'number',
             ),
             array(
                 'Contact me via', 'select', 80, 'Mobile,Email,Personal Message,Telephone', 'yes', '',
@@ -69,7 +61,7 @@ class Test extends \PHPUnit_Framework_TestCase
     {
         global $scripturl, $settings, $sourcedir;
 
-	define('SMF', 1);
+        define('SMF', 1);
         $settings['default_images_url'] = '';
         $settings['images_url'] = '';
         $scripturl = '';
@@ -86,8 +78,29 @@ class Test extends \PHPUnit_Framework_TestCase
         }
     }
 
+    public function testFieldErrors()
+    {
+        $i = 0;
+
+        foreach ($this->Fields as $field)
+        {
+            $field['id_field'] = ++$i;
+            $value = $field['id_field'];
+            switch ($this->field['mask']) {
+                case 'regex':
+                $value = '/^def//';
+                case 'email':
+                $value = 'live627@gmail.com';
+            }
+            $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
+            $type = new $class_name($field, $value, !empty($value));
+            $type->validate();
+            $this->assertFalse($type->getError());
+        }
+    }
+
     public function testFieldCount()
     {
-        $this->assertCount(10, $this->Fields);
+        $this->assertCount(8, $this->Fields);
     }
 }
