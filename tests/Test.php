@@ -86,7 +86,7 @@ class Test extends \PHPUnit_Framework_TestCase
         {
             $field['id_field'] = ++$i;
             $value = $field['id_field'];
-            switch ($this->field['mask']) {
+            switch ($field['mask']) {
                 case 'regex':
                 $value = '/^def//';
                 case 'email':
