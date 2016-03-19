@@ -17,7 +17,7 @@ class Test extends \PHPUnit_Framework_TestCase
     {
         $in_col = array(
             'name' => 'string', 'type' => 'string', 'size' => 'string', 'options' => 'string', 'active' => 'string', 'default_value' => 'string',
-            'can_search' => 'string', 'groups' => 'string', 'boards' => 'string', 'topic_only' => 'string', 'mi' => 'string', 'mask' => 'string',
+            'can_search' => 'string', 'groups' => 'string', 'boards' => 'string', 'topic_only' => 'string', 'bbc' => 'string', 'mask' => 'string',
         );
         $in_data = array(
             array(
