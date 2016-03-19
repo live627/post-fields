@@ -3,6 +3,10 @@
 namespace Tests;
 use \live627\PostFields\Util;
 
+function fatal_error($msg, $log) {
+	die($msg);
+}
+
 class Test extends \PHPUnit_Framework_TestCase
 {
     public $Fields = array();
