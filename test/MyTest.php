@@ -3,7 +3,7 @@
 namespace Tests;
 use live627\PostFields;
 
-class Test extends \PHPUnit_Framework_TestCase
+class MyTest extends \PHPUnit_Framework_TestCase
 {
     public $Fields = array();
 
