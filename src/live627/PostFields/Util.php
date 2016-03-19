@@ -86,7 +86,7 @@ class Util extends \Suki\Ohara
 		require_once($sourcedir . '/Class-PostFields.php');
 		$class_name = 'postFields_' . $field['type'];
 		if (!class_exists($class_name))
-			fatal_error('Param "' . $field['type'] . '" not found for field "' . $field['name'] . '" at ID #' . $field['id_field'] . '.', false);
+			die('Param "' . $field['type'] . '" not found for field "' . $field['name'] . '" at ID #' . $field['id_field'] . '.', false);
 
 		$param = new $class_name($field, $value, $exists);
 		$param->setHtml();
