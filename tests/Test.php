@@ -109,6 +109,8 @@ class Test extends \PHPUnit_Framework_TestCase
                     $value = '/^def//';
                     case 'email':
                     $value = 'live627@gmail.com';
+                    case 'float':
+                    $value = 6.8;
                 }
             }
             $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
