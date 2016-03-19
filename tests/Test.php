@@ -103,7 +103,7 @@ class Test extends \PHPUnit_Framework_TestCase
             } else {
                 $value = $field['value'];
             }
-            if ($field['type'] = 'text') {
+            if ($field['type'] == 'text') {
                 switch ($field['mask']) {
                     case 'regex':
                     $value = '/^def//';
