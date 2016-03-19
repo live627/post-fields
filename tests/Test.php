@@ -69,6 +69,7 @@ class Test extends \PHPUnit_Framework_TestCase
     {
         global $scripturl, $settings, $sourcedir;
 
+		define('SMF') = 1;
         $settings['default_images_url'] = '';
         $settings['images_url'] = '';
         $scripturl = '';
@@ -78,10 +79,11 @@ class Test extends \PHPUnit_Framework_TestCase
         foreach ($this->Fields as $field)
         {
             $field['id_field'] = ++$i;
-            $actual = (new \live627\PostFields\Util)->renderField($field, '', false);
+            $actual = (new Util)->renderField($field, '', false);
             $this->assertSame($field['name'], $actual['name']);
         }
     }
+
     public function testFieldCount()
     {
         $this->assertCount(10, $this->Fields);
