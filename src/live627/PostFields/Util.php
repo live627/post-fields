@@ -84,7 +84,7 @@ class Util extends \Suki\Ohara
 		global $scripturl, $settings, $sourcedir;
 
 		require_once($sourcedir . '/Class-PostFields.php');
-		$class_name = 'postFields_' . $field['type'];
+		$class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
 		if (!class_exists($class_name))
 			die('Param "' . $field['type'] . '" not found for field "' . $field['name'] . '" at ID #' . $field['id_field'] . '.');
 
