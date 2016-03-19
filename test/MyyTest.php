@@ -62,7 +62,7 @@ class Test extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $this->seitFields($in_col, $in_data);
+        $this->setFields($in_col, $in_data);
     }
 
     public function testExistingFields()
