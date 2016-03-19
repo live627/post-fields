@@ -78,7 +78,7 @@ class Test extends \PHPUnit_Framework_TestCase
             $field['description'] = '';
             $field['bbc'] = 'no';
             $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
-            $type = new $class_name($field, $value, !empty($value));
+            $type = new $class_name($field, '', false);
             if (false !== ($value = $type->getValue()))
                 $field['value'] = $value;
         }
