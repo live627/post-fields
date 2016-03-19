@@ -115,6 +115,7 @@ class Test extends \PHPUnit_Framework_TestCase
                     $value = 6;
                 }
             }
+            var_dump($field);
             $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
             $type = new $class_name($field, $value, !empty($value));
             $type->validate();
