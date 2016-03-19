@@ -69,7 +69,7 @@ class Test extends \PHPUnit_Framework_TestCase
     {
         global $scripturl, $settings, $sourcedir;
 
-		define('SMF') = 1;
+	define('SMF', 1);
         $settings['default_images_url'] = '';
         $settings['images_url'] = '';
         $scripturl = '';
