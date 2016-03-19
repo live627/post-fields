@@ -3,7 +3,7 @@
 namespace Tests;
 use live627\PostFields;
 
-class MockPsr4AutoloaderClass
+class Test extends \PHPUnit_Framework_TestCase
 {
     public $Fields = array();
 
@@ -12,16 +12,9 @@ class MockPsr4AutoloaderClass
         foreach ($data as $dataRow)
             $this->Fields[] = array_combine(array_keys($columns), $dataRow);
     }
-}
-
-class Test extends \PHPUnit_Framework_TestCase
-{
-    protected $loader;
 
     protected function setUp()
     {
-        $this->loader = new MockPsr4AutoloaderClass;
-
         $in_col = array(
             'name' => 'string', 'type' => 'string', 'size' => 'string', 'options' => 'string', 'active' => 'string', 'default_value' => 'string',
             'can_search' => 'string', 'groups' => 'string', 'boards' => 'string', 'topic_only' => 'string', 'mi' => 'string', 'mask' => 'string',
@@ -69,7 +62,7 @@ class Test extends \PHPUnit_Framework_TestCase
             ),
         );
 
-        $this->loader->setFields($in_col, $in_data);
+        $this->setFields($in_col, $in_data);
     }
 
     public function testExistingFields()
@@ -82,7 +75,7 @@ class Test extends \PHPUnit_Framework_TestCase
         $sourcedir = __DIR__  . '/../src/live627/PostFields';
         $i = 0;
 
-        foreach ($this->loader->Fields as $field)
+        foreach ($this->Fields as $field)
         {
             $field['id_field'] = ++$i;
             $actual = (new Util)->renderField($field, $value, $exists);
