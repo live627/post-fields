@@ -78,7 +78,7 @@ class Test extends \PHPUnit_Framework_TestCase
         foreach ($this->Fields as $field)
         {
             $field['id_field'] = ++$i;
-            $actual = (new Util)->renderField($field, '', false);
+            $actual = (new \live627\PostFieldsUtil)->renderField($field, '', false);
             $this->assertSame($field['name'], $actual['name']);
         }
     }
