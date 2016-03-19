@@ -4,7 +4,7 @@ namespace Tests;
 use \live627\PostFields\Util;
 
 function fatal_error($msg, $log) {
-	die($msg);
+    die($msg);
 }
 
 class Test extends \PHPUnit_Framework_TestCase
@@ -59,6 +59,17 @@ class Test extends \PHPUnit_Framework_TestCase
         );
 
         $this->setFields($in_col, $in_data);
+        $i = 0;
+        foreach ($this->Fields as &$field)
+        {
+            $field['id_field'] = ++$i;
+            $field['description'] = '';
+            $field['bbc'] = 'no';
+            $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
+            $type = new $class_name($field, $value, !empty($value));
+            if (false !== ($value = $type->getValue()))
+                $field['value'] = $value;
+        }
     }
 
     public function testExistingFields()
@@ -71,12 +82,8 @@ class Test extends \PHPUnit_Framework_TestCase
         $scripturl = '';
         $sourcedir = __DIR__  . '/../src/live627/PostFields';
         $i = 0;
-
         foreach ($this->Fields as $field)
         {
-            $field['id_field'] = ++$i;
-            $field['description'] = '';
-            $field['bbc'] = 'no';
             $actual = (new Util)->renderField($field, '', false);
             $this->assertSame($field['name'], $actual['name']);
         }
@@ -84,17 +91,18 @@ class Test extends \PHPUnit_Framework_TestCase
 
     public function testFieldErrors()
     {
-        $i = 0;
-
         foreach ($this->Fields as $field)
         {
-            $field['id_field'] = ++$i;
-            $value = $field['id_field'];
-            switch ($field['mask']) {
-                case 'regex':
-                $value = '/^def//';
-                case 'email':
-                $value = 'live627@gmail.com';
+            if (!isset($field['value']))) {
+                $value = $field['id_field'];
+            }
+            if ($field['type'] = 'text') {
+                switch ($field['mask']) {
+                    case 'regex':
+                    $value = '/^def//';
+                    case 'email':
+                    $value = 'live627@gmail.com';
+                }
             }
             $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
             $type = new $class_name($field, $value, !empty($value));
