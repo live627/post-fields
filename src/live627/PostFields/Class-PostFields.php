@@ -192,11 +192,11 @@ class postFields_text extends postFieldsBase
 	function validate()
 	{
 		if (!empty($this->field['length']))
-			$value = westr::substr($this->value, 0, $this->field['length']);
+			$value = substr($this->value, 0, $this->field['length']);
 
-		$class_name = 'postFieldMask_' . $this->field['mask'];
+		$class_name = '\\live627\\PostFields\\postFieldMask_' . $this->field['mask'];
 		if (!class_exists($class_name))
-			fatal_error('Mask "' . $this->field['mask'] . '" not found for field "' . $this->field['name'] . '" at ID #' . $this->field['id_field'] . '.', false);
+			die('Mask "' . $this->field['mask'] . '" not found for field "' . $this->field['name'] . '" at ID #' . $this->field['id_field'] . '.');
 
 		$mask = new $class_name($this->value, $this->field);
 		$mask->validate();
