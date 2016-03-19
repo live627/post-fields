@@ -1,7 +1,7 @@
 <?php
 
 namespace Tests;
-use \live627\PostFields;
+use \live627\PostFields\Util;
 
 class Test extends \PHPUnit_Framework_TestCase
 {
