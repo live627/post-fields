@@ -127,4 +127,3 @@ class Test extends \PHPUnit_Framework_TestCase
         $this->assertCount(8, $this->Fields);
     }
 }
-0
