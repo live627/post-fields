@@ -249,7 +249,7 @@ class postFieldMask_email extends postFieldMaskBase
 	function validate()
 	{
 		global $txt;
-		if (!preg_match('~^[0-9A-Za-z=_+\-/][0-9A-Za-z=_\'+\-/\.]*@[\w\-]+(\.[\w\-]+)*(\.[\w]{2,6})$~', $this->value))
+		if (!filter_var($this->value, FILTER_VALIDATE_EMAIL))
 			$this->err = array('pf_invalid_value', $this->field['name']);
 	}
 }
