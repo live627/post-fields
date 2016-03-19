@@ -44,7 +44,7 @@ class Test extends \PHPUnit_Framework_TestCase
                 'no', '1', '1', 'yes', 'no', '',
             ),
             array(
-                'Price', 'select', 80, 'Quote Me,Fixed', 'yes', '',
+                'Price', 'radio', 80, 'Quote Me,Fixed', 'yes', 'Quote Me',
                 'no', '1', '1', 'yes', 'yes', '',
             ),
             array(
@@ -56,16 +56,12 @@ class Test extends \PHPUnit_Framework_TestCase
                 'no', '1', '1', 'yes', 'yes', 'email',
             ),
             array(
-                'From', 'text', 80, '', 'yes', '',
-                'yes', '1', '1', 'yes', 'yes', 'nohtml',
+                'Human', 'check', 80, '', 'yes', '',
+                'no', '1', '1', 'yes', 'yes', 'nohtml',
             ),
             array(
                 '$', 'text', 80, '', 'yes', '',
                 'no', '1', '1', 'yes', 'no', 'number',
-            ),
-            array(
-                'Contact me via', 'select', 80, 'Mobile,Email,Personal Message,Telephone', 'yes', '',
-                'no', '1', '1', 'yes', 'no', '',
             ),
         );
 
@@ -115,7 +111,6 @@ class Test extends \PHPUnit_Framework_TestCase
                     $value = 6;
                 }
             }
-            var_dump($field);
             $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
             $type = new $class_name($field, $value, !empty($value));
             $type->validate();
@@ -125,6 +120,6 @@ class Test extends \PHPUnit_Framework_TestCase
 
     public function testFieldCount()
     {
-        $this->assertCount(8, $this->Fields);
+        $this->assertCount(7, $this->Fields);
     }
 }
