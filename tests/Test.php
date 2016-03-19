@@ -21,6 +21,7 @@ class Test extends \PHPUnit_Framework_TestCase
     {
         global $scripturl, $settings, $sourcedir;
 
+        // What are you doing here, SMF?
         define('SMF', 1);
         $settings['default_images_url'] = '';
         $settings['images_url'] = '';
@@ -68,6 +69,7 @@ class Test extends \PHPUnit_Framework_TestCase
 
         $this->setFields($in_col, $in_data);
         $i = 0;
+        require_once($sourcedir . '/Class-PostFields.php');
         foreach ($this->Fields as &$field)
         {
             $field['id_field'] = ++$i;
