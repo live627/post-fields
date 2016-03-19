@@ -82,6 +82,7 @@ class Test extends \PHPUnit_Framework_TestCase
             if (false !== ($value = $type->getValue()))
                 $field['value'] = $value;
         }
+        var_dump($this->fields);
     }
 
     public function testExistingFields()
