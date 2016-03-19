@@ -93,7 +93,7 @@ class Test extends \PHPUnit_Framework_TestCase
     {
         foreach ($this->Fields as $field)
         {
-            if (!isset($field['value']))) {
+            if (!isset($field['value'])) {
                 $value = $field['id_field'];
             }
             if ($field['type'] = 'text') {
