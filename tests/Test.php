@@ -19,6 +19,14 @@ class Test extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
+        global $scripturl, $settings, $sourcedir;
+
+        define('SMF', 1);
+        $settings['default_images_url'] = '';
+        $settings['images_url'] = '';
+        $scripturl = '';
+        $sourcedir = __DIR__  . '/../src/live627/PostFields';
+
         $in_col = array(
             'name' => 'string', 'type' => 'string', 'size' => 'string', 'options' => 'string', 'active' => 'string', 'default_value' => 'string',
             'can_search' => 'string', 'groups' => 'string', 'boards' => 'string', 'topic_only' => 'string', 'bbc' => 'string', 'mask' => 'string',
@@ -74,13 +82,6 @@ class Test extends \PHPUnit_Framework_TestCase
 
     public function testExistingFields()
     {
-        global $scripturl, $settings, $sourcedir;
-
-        define('SMF', 1);
-        $settings['default_images_url'] = '';
-        $settings['images_url'] = '';
-        $scripturl = '';
-        $sourcedir = __DIR__  . '/../src/live627/PostFields';
         $i = 0;
         foreach ($this->Fields as $field)
         {
