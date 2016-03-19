@@ -57,7 +57,7 @@ class Test extends \PHPUnit_Framework_TestCase
             ),
             array(
                 'Human', 'check', 80, '', 'yes', '',
-                'no', '1', '1', 'yes', 'yes', 'nohtml',
+                'no', '1', '1', 'yes', 'yes', '',
             ),
             array(
                 '$', 'text', 80, '', 'yes', '',
@@ -103,15 +103,18 @@ class Test extends \PHPUnit_Framework_TestCase
                 switch ($field['mask']) {
                     case 'regex':
                     $value = '/^def//';
+                    break;
                     case 'email':
                     $value = 'live627@gmail.com';
+                    break;
                     case 'float':
                     $value = 6.8;
+                    break;
                     case 'number':
                     $value = 6;
+                    break;
                 }
             }
-        var_dump ($field, $value);
             $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
             $type = new $class_name($field, $value, !empty($value));
             $type->validate();
