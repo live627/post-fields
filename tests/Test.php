@@ -1,6 +1,8 @@
 <?php
 
-            define('SMF', 1);
+// What are you doing here, SMF?
+define('SMF', 1);
+
 function call_integration_hook($hook, $parameters = array()) {
     // You're fired! You're all fired!
 }
@@ -32,10 +34,6 @@ class Test extends PHPUnit_Framework_TestCase
     {
         global $scripturl, $settings, $sourcedir;
 
-        // What are you doing here, SMF?
-        if (!defined('SMF')) {
-            define('SMF', 1);
-        }
         $settings['default_images_url'] = '';
         $settings['images_url'] = '';
         $scripturl = '';
@@ -86,8 +84,8 @@ class Test extends PHPUnit_Framework_TestCase
             $field['description'] = '';
             $field['bbc'] = 'no';
             $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
-            $field['type'] = new $class_name($field, '', false);
-            $value = $field['type']->getValue();
+            $field['class'] = new $class_name($field, '', false);
+            $value = $field['class']->getValue();
             if (empty($field['value'])) {
                 $value = $field['id_field'];
             }
@@ -150,7 +148,7 @@ class Test extends PHPUnit_Framework_TestCase
     {
         foreach ($this->loader->Fields as $field)
         {
-            $field['type']->validate();
+            $field['class']->validate();
             $this->assertFalse($field['type']->getError());
         }
     }
