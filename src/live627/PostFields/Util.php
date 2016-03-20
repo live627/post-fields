@@ -34,23 +34,20 @@ class Util extends \Suki\Ohara
 				SELECT *
 				FROM {db_prefix}message_fields');
 			while ($row = $smcFunc['db_fetch_assoc']($request))
-				$list[$row['id_field']] = $row;
+				$this->fields[$row['id_field']] = $row;
 			$smcFunc['db_free_result']($request);
-			call_integration_hook('integrate_get_post_fields', array(&$list));
 		}
-		return $list;
+		return $this->fields;
 	}
 
 	function getFieldsSearchable()
 	{
-		$fields = $this->getFields();
 		$list = array();
-		foreach ($fields as $field) {
+		foreach ($this->fields as $field) {
 			if ($field['can_search'] == 'yes') {
 				$list[$field['id_field']] = $field;
 			}
 		}
-		call_integration_hook('integrate_get_post_fields_searchable', array(&$list));
 		return $list;
 	}
 
@@ -58,9 +55,8 @@ class Util extends \Suki\Ohara
 	{
 		global $context, $user_info;
 
-		$fields = $this->getFields();
 		$list = array();
-		foreach ($fields as $field)
+		foreach ($this->fields as $field)
 		{
 			$board_list = array_flip(explode(',', $field['boards']));
 			if (!isset($board_list[$board]))
@@ -73,7 +69,6 @@ class Util extends \Suki\Ohara
 
 			$list[$field['id_field']] = $field;
 		}
-		call_integration_hook('integrate_filterFields', array(&$list, $board));
 		return $list;
 	}
 
