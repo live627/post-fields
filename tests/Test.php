@@ -144,7 +144,7 @@ class Test extends PHPUnit_Framework_TestCase
         $this->assertCount(7, $actual);
 
         $actual = $this->loader->filterFields(2);
-        $this->assertCount(1, $actual);
+        $this->assertCount(2, $actual);
     }
 
     public function testFieldErrors()
