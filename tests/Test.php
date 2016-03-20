@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 // What are you doing here, SMF?
 define('SMF', 1);
@@ -106,6 +106,9 @@ class Test extends PHPUnit_Framework_TestCase
                 }
             }
             $field['value'] = $value;
+
+            // Refresh the fields!
+            $field['class'] = new $class_name($field, $value, !empty($value));
         }
     }
 
