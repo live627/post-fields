@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests;
-use \live627\PostFields\Util;
+function call_integration_hook($hook, $parameters = array()) {
+    // You're fired! You're all fired!
+}
 
 function fatal_error($msg, $log) {
     die($msg);
 }
-
-class Test extends \PHPUnit_Framework_TestCase
+class MockUtil extends live627\PostFields\Util
 {
     public $Fields = array();
 
@@ -16,6 +16,16 @@ class Test extends \PHPUnit_Framework_TestCase
         foreach ($data as $dataRow)
             $this->Fields[] = array_combine(array_keys($columns), $dataRow);
     }
+
+    function total_getPostFields()
+    {
+        return $this->Fields;
+    }
+}
+
+class Test extends PHPUnit_Framework_TestCase
+{
+    protected $loader;
 
     protected function setUp()
     {
@@ -41,11 +51,11 @@ class Test extends \PHPUnit_Framework_TestCase
             ),
             array(
                 'When', 'select', 80, 'ASAP,Tomorrow,This Week', 'yes', 'Tomorrow',
-                'no', '1', '1', 'yes', 'no', '',
+                'no', '1,2', '1,2', 'yes', 'no', '',
             ),
             array(
                 'Price', 'radio', 80, 'Quote Me,Fixed', 'yes', 'Quote Me',
-                'no', '1', '1', 'yes', 'yes', '',
+                'no', '1', '1,2', 'yes', 'yes', '',
             ),
             array(
                 '£', 'text', 80, '', 'yes', '',
@@ -61,43 +71,24 @@ class Test extends \PHPUnit_Framework_TestCase
             ),
             array(
                 '$', 'text', 80, '', 'yes', '',
-                'no', '1', '1', 'yes', 'no', 'number',
+                'no', '1', '4', 'yes', 'no', 'number',
             ),
         );
 
-        $this->setFields($in_col, $in_data);
+        $this->loader = new MockUtil;
+        $this->loader->setFields($in_col, $in_data);
         $i = 0;
         require_once($sourcedir . '/Class-PostFields.php');
-        foreach ($this->Fields as &$field)
+        foreach ($this->loader->Fields as &$field)
         {
             $field['id_field'] = ++$i;
             $field['description'] = '';
             $field['bbc'] = 'no';
             $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
-            $type = new $class_name($field, '', false);
-            if (false !== ($value = $type->getValue()))
-                $field['value'] = $value;
-        }
-    }
-
-    public function testExistingFields()
-    {
-        $i = 0;
-        foreach ($this->Fields as $field)
-        {
-            $actual = (new Util)->renderField($field, '', false);
-            $this->assertSame($field['name'], $actual['name']);
-        }
-    }
-
-    public function testFieldErrors()
-    {
-        foreach ($this->Fields as $field)
-        {
+            $field['type'] = new $class_name($field, '', false);
+            $value = $field['type']->getValue();
             if (empty($field['value'])) {
                 $value = $field['id_field'];
-            } else {
-                $value = $field['value'];
             }
             if ($field['type'] == 'text') {
                 switch ($field['mask']) {
@@ -115,15 +106,56 @@ class Test extends \PHPUnit_Framework_TestCase
                     break;
                 }
             }
-            $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
-            $type = new $class_name($field, $value, !empty($value));
-            $type->validate();
-            $this->assertFalse($type->getError());
+            $field['value'] = $value;
+        }
+    }
+
+    public function testExistingFields()
+    {
+        foreach ($this->loader->Fields as $field)
+        {
+            $actual = $this->loader->renderField($field, '', false);
+            $this->assertSame($field['name'], $actual['name']);
+        }
+    }
+
+    public function testFilteredFields()
+    {
+        global $user_info;
+
+        $user_info['groups'] = [1];
+        $actual = $this->loader->filterFields(1);
+        $this->assertCount(6, $actual);
+
+        $actual = $this->loader->filterFields(2);
+        $this->assertCount(2, $actual);
+
+        $user_info['groups'] = [2];
+        $actual = $this->loader->filterFields(1);
+        $this->assertCount(1, $actual);
+
+        $actual = $this->loader->filterFields(2);
+        $this->assertCount(1, $actual);
+
+        $user_info['groups'] = [1, 2, 4];
+        $actual = $this->loader->filterFields(1);
+        $this->assertCount(7, $actual);
+
+        $actual = $this->loader->filterFields(2);
+        $this->assertCount(1, $actual);
+    }
+
+    public function testFieldErrors()
+    {
+        foreach ($this->loader->Fields as $field)
+        {
+            $field['type']->validate();
+            $this->assertFalse($field['type']->getError());
         }
     }
 
     public function testFieldCount()
     {
-        $this->assertCount(7, $this->Fields);
+        $this->assertCount(7, $this->loader->Fields);
     }
 }
