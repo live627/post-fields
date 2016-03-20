@@ -22,14 +22,10 @@ class MockUtil extends live627\PostFields\Util
             $this->fields[] = array_combine(array_keys($columns), $dataRow);
     }
 
-    public function __get($name)
+    // Work some magic into this joint.
+    public function &__get($name)
     {
         return $this->$name;
-    }
-
-    public function __set($name, $value)
-    {
-        $this->$name = $value;
     }
 }
 
