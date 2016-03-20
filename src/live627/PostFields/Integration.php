@@ -18,16 +18,15 @@ class Integration
 {
 	public static function admin_areas(&$admin_areas)
 	{
-		global $txt;
-
-		loadLanguage('PostFields');
+		$ohara = new \Suki\Ohara();
+		$ohara->name = 'PostFields';
 		$admin_areas['layout']['areas']['postfields'] = array(
-			'label' => $txt['PostFields'],
+			'label' => $ohara->text('title'),
 			'icon' => 'settings.gif',
 			'function' => function() { \live627\PostFields\Dispatcher::getInstance(); },
 			'subsections' => array(
-				'index' => array($txt['pf_menu_index']),
-				'edit' => array($txt['pf_menu_edit']),
+				'index' => array($ohara->text('menu_index')),
+				'edit' => array($ohara->text('menu_edit')),
 			),
 		);
 	}
@@ -223,7 +222,7 @@ class Integration
 			if ((empty($topic) || empty($topic_value)) && $field['topic_only'] == 'yes')
 			{
 				$value = isset($_POST['postfield'][$field['id_field']]) ? $_POST['postfield'][$field['id_field']] : '';
-				$class_name = 'postFields_' . $field['type'];
+				$class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
 				if (!class_exists($class_name))
 					fatal_error('Param "' . $field['type'] . '" not found for field "' . $field['name'] . '" at ID #' . $field['id_field'] . '.', false);
 

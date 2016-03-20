@@ -18,40 +18,38 @@ if (!defined('SMF')) {
 class Util extends \Suki\Ohara
 {
 	public $name = __CLASS__;
-	protected static $_activity = array();
+	protected $fields = array();
 
 	public function __construct()
 	{
 		$this->setRegistry();
 	}
 
-	function total_getPostFields()
+	function getFields()
 	{
 		global $smcFunc;
 
-		$list = array();
-		$request = $smcFunc['db_query']('', '
-			SELECT *
-			FROM {db_prefix}message_fields');
-		while ($row = $smcFunc['db_fetch_assoc']($request))
-			$list[$row['id_field']] = $row;
-		$smcFunc['db_free_result']($request);
-		call_integration_hook('integrate_get_post_fields', array(&$list));
+		if (empty($this->fields)) {
+			$request = $smcFunc['db_query']('', '
+				SELECT *
+				FROM {db_prefix}message_fields');
+			while ($row = $smcFunc['db_fetch_assoc']($request))
+				$list[$row['id_field']] = $row;
+			$smcFunc['db_free_result']($request);
+			call_integration_hook('integrate_get_post_fields', array(&$list));
+		}
 		return $list;
 	}
 
-	function total_getPostFieldsSearchable()
+	function getFieldsSearchable()
 	{
-		global $smcFunc;
-
+		$fields = $this->getFields();
 		$list = array();
-		$request = $smcFunc['db_query']('', '
-			SELECT *
-			FROM {db_prefix}message_fields
-			WHERE can_search = \'yes\'');
-		while ($row = $smcFunc['db_fetch_assoc']($request))
-			$list[$row['id_field']] = $row;
-		$smcFunc['db_free_result']($request);
+		foreach ($fields as $field) {
+			if ($field['can_search'] == 'yes') {
+				$list[$field['id_field']] = $field;
+			}
+		}
 		call_integration_hook('integrate_get_post_fields_searchable', array(&$list));
 		return $list;
 	}
@@ -60,7 +58,7 @@ class Util extends \Suki\Ohara
 	{
 		global $context, $user_info;
 
-		$fields = $this->total_getPostFields();
+		$fields = $this->getFields();
 		$list = array();
 		foreach ($fields as $field)
 		{
@@ -75,7 +73,7 @@ class Util extends \Suki\Ohara
 
 			$list[$field['id_field']] = $field;
 		}
-		call_integration_hook('integrate_get_post_fields_filtered', array(&$list, $board));
+		call_integration_hook('integrate_filterFields', array(&$list, $board));
 		return $list;
 	}
 
@@ -86,7 +84,7 @@ class Util extends \Suki\Ohara
 		require_once($sourcedir . '/Class-PostFields.php');
 		$class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
 		if (!class_exists($class_name))
-			die('Param "' . $field['type'] . '" not found for field "' . $field['name'] . '" at ID #' . $field['id_field'] . '.');
+			fatal_error('Param "' . $field['type'] . '" not found for field "' . $field['name'] . '" at ID #' . $field['id_field'] . '.', false);
 
 		$param = new $class_name($field, $value, $exists);
 		$param->setHtml();

@@ -19,7 +19,7 @@ interface postFields
 	/*
 	 * Constructs the field.
 	 *
-	 * @param array $field The field as returned by {@link total_getPostFields()}.
+	 * @param array $field The field as returned by {@link getFields()}.
 	 * @param string $value Field value.
 	 * @param bool $exists Whether the value exists/is not empty.
 	 * @access public
@@ -196,7 +196,7 @@ class postFields_text extends postFieldsBase
 
 		$class_name = '\\live627\\PostFields\\postFieldMask_' . $this->field['mask'];
 		if (!class_exists($class_name))
-			die('Mask "' . $this->field['mask'] . '" not found for field "' . $this->field['name'] . '" at ID #' . $this->field['id_field'] . '.');
+			fatal_error('Mask "' . $this->field['mask'] . '" not found for field "' . $this->field['name'] . '" at ID #' . $this->field['id_field'] . '.', false);
 
 		$mask = new $class_name($this->value, $this->field);
 		$mask->validate();

@@ -14,18 +14,20 @@ if (!defined('SMF')) {
 	die('Hacking attempt...');
 }
 
-class Dispatcher
+class Dispatcher extends \Suki\Ohara
 {
+	public $name = 'PostFields';
+
 	use \ModHelper\SingletonTrait;
 
 	public function __construct()
 	{
-		global $context, $txt;
+		global $context;
 
 		// Load up all the tabs...
 		$context[$context['admin_menu_name']]['tab_data'] = array(
-			'title' => $txt['PostFields'],
-			'description' => $txt['PostFields_desc'],
+			'title' => $this->text('title'),
+			'description' => $this->text('desc'),
 		);
 
 		$sub_actions = [

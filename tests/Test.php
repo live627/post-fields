@@ -2,6 +2,10 @@
 
 // What are you doing here, SMF?
 define('SMF', 1);
+$settings['default_images_url'] = '';
+$settings['images_url'] = '';
+$scripturl = '';
+$sourcedir = __DIR__  . '/../src/live627/PostFields';
 
 function call_integration_hook($hook, $parameters = array()) {
     // You're fired! You're all fired!
@@ -20,7 +24,7 @@ class MockUtil extends live627\PostFields\Util
             $this->Fields[] = array_combine(array_keys($columns), $dataRow);
     }
 
-    function total_getPostFields()
+    function getFields()
     {
         return $this->Fields;
     }
@@ -33,11 +37,6 @@ class Test extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         global $scripturl, $settings, $sourcedir;
-
-        $settings['default_images_url'] = '';
-        $settings['images_url'] = '';
-        $scripturl = '';
-        $sourcedir = __DIR__  . '/../src/live627/PostFields';
 
         $in_col = array(
             'name' => 'string', 'type' => 'string', 'size' => 'string', 'options' => 'string', 'active' => 'string', 'default_value' => 'string',
@@ -114,7 +113,7 @@ class Test extends PHPUnit_Framework_TestCase
 
     public function testExistingFields()
     {
-        foreach ($this->loader->Fields as $field)
+        foreach ($this->loader->getFields() as $field)
         {
             $actual = $this->loader->renderField($field, '', false);
             $this->assertSame($field['name'], $actual['name']);
@@ -149,15 +148,20 @@ class Test extends PHPUnit_Framework_TestCase
 
     public function testFieldErrors()
     {
-        foreach ($this->loader->Fields as $field)
+        foreach ($this->loader->getFields() as $field)
         {
             $field['class']->validate();
             $this->assertFalse($field['class']->getError());
         }
     }
 
+    public function testFieldSearchableCount()
+    {
+        $this->assertCount(0, $this->loader->getFieldsSearchable());
+    }
+
     public function testFieldCount()
     {
-        $this->assertCount(7, $this->loader->Fields);
+        $this->assertCount(7, $this->loader->getFields());
     }
 }

@@ -15,8 +15,9 @@ if (!defined('SMF')) {
 	die('Hacking attempt...');
 }
 
-class Admin
+class Admin extends \Suki\Ohara
 {
+	public $name = 'PostFields';
 	private $util;
 
 	public function __construct()
@@ -57,7 +58,7 @@ class Admin
 		if (isset($_POST['save']))
 		{
 			checkSession();
-			foreach (total_getPostFields() as $field)
+			foreach (getFields() as $field)
 			{
 				$bbc = !empty($_POST['bbc'][$field['id_field']]) ? 'yes' : 'no';
 				if ($bbc != $field['bbc'])
@@ -258,8 +259,7 @@ class Admin
 		global $txt, $scripturl, $context, $settings, $smcFunc;
 
 		$context['fid'] = isset($_REQUEST['fid']) ? (int) $_REQUEST['fid'] : 0;
-		$context['page_title'] = $txt['PostFields'] . ' - ' . ($context['fid'] ? $txt['pf_title'] : $txt['pf_add']);
-		$context['page_title2'] = $txt['PostFields'] . ' - ' . ($context['fid'] ? $txt['pf_title'] : $txt['pf_add']);
+		$context['page_title'] = $this->text('title') . ' - ' . ($context['fid'] ? $txt['pf_title'] : $txt['pf_add']);
 		$context['html_headers'] .= '<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/postfieldsadmin.js"></script>';
 		loadTemplate('PostFields');
 
