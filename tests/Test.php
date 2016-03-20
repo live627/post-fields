@@ -16,17 +16,20 @@ function fatal_error($msg, $log) {
 }
 class MockUtil extends live627\PostFields\Util
 {
-    public $Fields = array();
-
     public function setFields(array $columns, array $data)
     {
         foreach ($data as $dataRow)
-            $this->Fields[] = array_combine(array_keys($columns), $dataRow);
+            $this->fields[] = array_combine(array_keys($columns), $dataRow);
     }
 
-    function getFields()
+    public function __get($name)
     {
-        return $this->Fields;
+        return $this->$name;
+    }
+
+    public function __set($name, $value)
+    {
+        $this->$name = $value;
     }
 }
 
@@ -77,7 +80,7 @@ class Test extends PHPUnit_Framework_TestCase
         $this->loader->setFields($in_col, $in_data);
         $i = 0;
         require_once($sourcedir . '/Class-PostFields.php');
-        foreach ($this->loader->Fields as &$field)
+        foreach ($this->loader->fields as &$field)
         {
             $field['id_field'] = ++$i;
             $field['description'] = '';
