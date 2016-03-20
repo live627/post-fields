@@ -149,7 +149,7 @@ class Test extends PHPUnit_Framework_TestCase
         foreach ($this->loader->Fields as $field)
         {
             $field['class']->validate();
-            $this->assertFalse($field['type']->getError());
+            $this->assertFalse($field['class']->getError());
         }
     }
 
