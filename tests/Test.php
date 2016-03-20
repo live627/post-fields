@@ -86,7 +86,7 @@ class Test extends PHPUnit_Framework_TestCase
             $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
             $field['class'] = new $class_name($field, '', false);
             $value = $field['class']->getValue();
-            if (empty($field['value'])) {
+            if (empty($value)) {
                 $value = $field['id_field'];
             }
             if ($field['type'] == 'text') {
@@ -138,7 +138,7 @@ class Test extends PHPUnit_Framework_TestCase
 
         $user_info['groups'] = [1, 2, 4];
         $actual = $this->loader->filterFields(1);
-        $this->assertCount(7, $actual);
+        $this->assertCount(6, $actual);
 
         $actual = $this->loader->filterFields(2);
         $this->assertCount(1, $actual);
