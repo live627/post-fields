@@ -134,7 +134,7 @@ class Test extends PHPUnit_Framework_TestCase
 
         $user_info['groups'] = [2];
         $actual = $this->loader->filterFields(1);
-        $this->assertCount(1, $actual);
+        $this->assertCount(2, $actual);
 
         $actual = $this->loader->filterFields(2);
         $this->assertCount(1, $actual);
