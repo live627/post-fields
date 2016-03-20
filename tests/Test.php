@@ -1,4 +1,4 @@
- <?php
+<?php
 
 // What are you doing here, SMF?
 define('SMF', 1);
@@ -70,7 +70,7 @@ class Test extends PHPUnit_Framework_TestCase
             ),
             array(
                 '$', 'text', 80, '', 'yes', '',
-                'no', '1', '4', 'yes', 'no', 'number',
+                'no', '4', '1', 'yes', 'no', 'number',
             ),
         );
 
