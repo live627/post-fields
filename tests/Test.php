@@ -1,5 +1,6 @@
 <?php
 
+            define('SMF', 1);
 function call_integration_hook($hook, $parameters = array()) {
     // You're fired! You're all fired!
 }
