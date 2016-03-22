@@ -112,10 +112,17 @@ class Admin extends \Suki\Ohara
 			'no_items_label' => $this->text('none'),
 			'items_per_page' => 25,
 			'get_items' => array(
-				'function' => ['live627\PostFields\Admin', 'list_getPostFields'],
+				'function' => ['live627\PostFields\Admin', 'process'],
+				'params' => array(
+					$this->util->getFields(),
+					'pf_fields',
+				),
 			),
 			'get_count' => array(
-				'function' => ['live627\PostFields\Admin', 'list_getPostFieldSize'],
+				'function' => function ()
+				{
+					return count($this->util->getFields());
+				}
 			),
 			'columns' => array(
 				'name' => array(
@@ -487,40 +494,21 @@ class Admin extends \Suki\Ohara
 		}
 	}
 
-	function list_getPostFields($start, $items_per_page, $sort)
+	function process($start, $length, $sort, $list, $listId)
 	{
-		global $smcFunc;
+		global $context;
 
-		$list = array();
-		$request = $smcFunc['db_query']('', '
-			SELECT id_field, name, description, type, bbc, active, can_search
-			FROM {db_prefix}message_fields
-			ORDER BY {raw:sort}
-			LIMIT {int:start}, {int:items_per_page}',
-			array(
-				'sort' => $sort,
-				'start' => $start,
-				'items_per_page' => $items_per_page,
-			)
-		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
-			$list[] = $row;
-		$smcFunc['db_free_result']($request);
+		$sort = [];
+		$list_context = $context[$listId];
+		foreach ($list as $key => $row) {
+			$sort[$key] = $row[$list_context['sort']['id']];
+		}
+		array_multisort($sort, $list_context['sort']['desc'] ? SORT_DESC : SORT_ASC, $list);
+
+		if ($length) {
+			$list = array_slice($list, $start, $length);
+		}
 
 		return $list;
-	}
-
-	function list_getPostFieldSize()
-	{
-		global $smcFunc;
-
-		$request = $smcFunc['db_query']('', '
-			SELECT COUNT(*)
-			FROM {db_prefix}message_fields');
-
-		list ($numProfileFields) = $smcFunc['db_fetch_row']($request);
-		$smcFunc['db_free_result']($request);
-
-		return $numProfileFields;
 	}
 }
