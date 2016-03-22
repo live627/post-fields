@@ -6,7 +6,7 @@ function template_edit()
 
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=postfields;sa=edit" method="post" accept-charset="UTF-8">
+		<form action="', $scripturl, '?action=admin;area=postfields;sa=edit" method="post" accept-charset="UTF-8" id="invertAllRequiresThis">
 			<div class="cat_bar">
 				<h3 class="catbg">
 					', $context['page_title2'], '
@@ -18,31 +18,31 @@ function template_edit()
 
 	echo '
 				<fieldset>
-					<legend>', $txt['pf_general'], '</legend>
+					<legend>', $txt['PostFields_general'], '</legend>
 
 					<dl class="settings">
 						<dt>
-							<strong>', $txt['pf_name'], ':</strong>
+							<strong>', $txt['PostFields_name'], ':</strong>
 						</dt>
 						<dd>
 							<input type="text" name="name" value="', $context['field']['name'], '" size="20" maxlength="40">
 						</dd>
 						<dt>
-							<strong>', $txt['pf_description'], ':</strong>
+							<strong>', $txt['PostFields_description'], ':</strong>
 						</dt>
 						<dd>
 							<textarea name="description" rows="3" cols="40">', $context['field']['description'], '</textarea>
 						</dd>
 						<dt>
 							<a id="field_show_enclosed" href="', $scripturl, '?action=helpadmin;help=field_show_enclosed" onclick="return reqWin(this);" class="help" title="', $txt['help'], '"></a>
-							<strong>', $txt['pf_enclose'], ':</strong>
-							<br /><span class="smalltext">', $txt['pf_enclose_desc'], '</span>
+							<strong>', $txt['PostFields_enclose'], ':</strong>
+							<br /><span class="smalltext">', $txt['PostFields_enclose_desc'], '</span>
 						</dt>
 						<dd>
 							<textarea name="enclose" rows="10" cols="50">', $context['field']['enclose'], '</textarea>
 						</dd>
 						<dt>
-							<strong>', $txt['pf_boards'], ':</strong>
+							<strong>', $txt['PostFields_boards'], ':</strong>
 						</dt>
 						<dd>
 							<div class="information">
@@ -61,7 +61,7 @@ function template_edit()
 							</div>
 						</dd>
 						<dt>
-							<strong>', $txt['pf_groups'], ':</strong>
+							<strong>', $txt['PostFields_groups'], ':</strong>
 						</dt>
 						<dd>
 							<div class="information">
@@ -84,52 +84,52 @@ function template_edit()
 					</dl>
 				</fieldset>
 				<fieldset>
-					<legend>', $txt['pf_input'], '</legend>
+					<legend>', $txt['PostFields_input'], '</legend>
 					<dl class="settings">
 						<dt>
-							<strong>', $txt['pf_picktype'], ':</strong>
+							<strong>', $txt['PostFields_picktype'], ':</strong>
 						</dt>
 						<dd>
 							<select name="type" id="field_type" onchange="updateInputBoxes();">
-								<option value="text"', $context['field']['type'] == 'text' ? ' selected' : '', '>', $txt['pf_type_text'], '</option>
-								<option value="textarea"', $context['field']['type'] == 'textarea' ? ' selected' : '', '>', $txt['pf_type_textarea'], '</option>
-								<option value="select"', $context['field']['type'] == 'select' ? ' selected' : '', '>', $txt['pf_type_select'], '</option>
-								<option value="radio"', $context['field']['type'] == 'radio' ? ' selected' : '', '>', $txt['pf_type_radio'], '</option>
-								<option value="check"', $context['field']['type'] == 'check' ? ' selected' : '', '>', $txt['pf_type_check'], '</option>
+								<option value="text"', $context['field']['type'] == 'text' ? ' selected' : '', '>', $txt['PostFields_type_text'], '</option>
+								<option value="textarea"', $context['field']['type'] == 'textarea' ? ' selected' : '', '>', $txt['PostFields_type_textarea'], '</option>
+								<option value="select"', $context['field']['type'] == 'select' ? ' selected' : '', '>', $txt['PostFields_type_select'], '</option>
+								<option value="radio"', $context['field']['type'] == 'radio' ? ' selected' : '', '>', $txt['PostFields_type_radio'], '</option>
+								<option value="check"', $context['field']['type'] == 'check' ? ' selected' : '', '>', $txt['PostFields_type_check'], '</option>
 							</select>
 						</dd>
 						<dt id="max_length_dt">
-							<strong>', $txt['pf_max_length'], ':</strong>
-							<br /><span class="smalltext">', $txt['pf_max_length_desc'], '</span>
+							<strong>', $txt['PostFields_max_length'], ':</strong>
+							<br /><span class="smalltext">', $txt['PostFields_max_length_desc'], '</span>
 						</dt>
 						<dd id="max_length_dd">
 							<input type="text" name="lengt" value="', $context['field']['length'], '" size="7" maxlength="6">
 						</dd>
 						<dt id="dimension_dt">
-							<strong>', $txt['pf_dimension'], ':</strong>
+							<strong>', $txt['PostFields_dimension'], ':</strong>
 						</dt>
 						<dd id="dimension_dd">
-							<strong>', $txt['pf_dimension_row'], ':</strong> <input type="text" name="rows" value="', $context['field']['rows'], '" size="5" maxlength="3">
-							<strong>', $txt['pf_dimension_col'], ':</strong> <input type="text" name="cols" value="', $context['field']['cols'], '" size="5" maxlength="3">
+							<strong>', $txt['PostFields_dimension_row'], ':</strong> <input type="text" name="rows" value="', $context['field']['rows'], '" size="5" maxlength="3">
+							<strong>', $txt['PostFields_dimension_col'], ':</strong> <input type="text" name="cols" value="', $context['field']['cols'], '" size="5" maxlength="3">
 						</dd>
 						<dt id="size_dt">
-							<strong>', $txt['pf_size'], ':</strong>
-							<br /><span class="smalltext">', $txt['pf_size_desc'], '</span>
+							<strong>', $txt['PostFields_size'], ':</strong>
+							<br /><span class="smalltext">', $txt['PostFields_size_desc'], '</span>
 						</dt>
 						<dd id="size_dd">
-							<strong>', $txt['pf_size_row'], ':</strong> <input type="text" name="rows" value="', $context['field']['rows'], '" size="5" maxlength="3">
-							<strong>', $txt['pf_size_col'], ':</strong> <input type="text" name="cols" value="', $context['field']['cols'], '" size="5" maxlength="3">
+							<strong>', $txt['PostFields_size_row'], ':</strong> <input type="text" name="rows" value="', $context['field']['rows'], '" size="5" maxlength="3">
+							<strong>', $txt['PostFields_size_col'], ':</strong> <input type="text" name="cols" value="', $context['field']['cols'], '" size="5" maxlength="3">
 						</dd>
 						<dt id="bbc_dt">
-							<strong>', $txt['pf_bbc'], '</strong>
+							<strong>', $txt['PostFields_bbc'], '</strong>
 						</dt>
 						<dd id="bbc_dd">
 							<input type="checkbox" name="bbc"', $context['field']['bbc'] ? ' checked' : '', '>
 						</dd>
 						<dt id="options_dt">
 							<a href="', $scripturl, '?action=helpadmin;help=postoptions" onclick="return reqWin(this);" class="help" title="', $txt['help'], '"></a>
-							<strong>', $txt['pf_options'], ':</strong>
-							<br /><span class="smalltext">', $txt['pf_options_desc'], '</span>
+							<strong>', $txt['PostFields_options'], ':</strong>
+							<br /><span class="smalltext">', $txt['PostFields_options_desc'], '</span>
 						</dt>
 						<dd id="options_dd">
 							<div>';
@@ -144,7 +144,7 @@ function template_edit()
 							</div>
 						</dd>
 						<dt id="default_dt">
-							<strong>', $txt['pf_default'], ':</strong>
+							<strong>', $txt['PostFields_default'], ':</strong>
 						</dt>
 						<dd id="default_dd">
 							<input type="checkbox" name="default_check"', $context['field']['default_check'] ? ' checked' : '', '>
@@ -152,41 +152,41 @@ function template_edit()
 					</dl>
 				</fieldset>
 				<fieldset>
-					<legend>', $txt['pf_advanced'], '</legend>
+					<legend>', $txt['PostFields_advanced'], '</legend>
 					<dl class="settings">
 						<dt id="mask_dt">
 							<a id="post_mask" href="', $scripturl, '?action=helpadmin;help=post_mask" onclick="return reqWin(this);" class="help" title="', $txt['help'], '"></a>
-							<strong>', $txt['pf_mask'], ':</strong>
-							<br /><span class="smalltext">', $txt['pf_mask_desc'], '</span>
+							<strong>', $txt['PostFields_mask'], ':</strong>
+							<br /><span class="smalltext">', $txt['PostFields_mask_desc'], '</span>
 						</dt>
 						<dd id="mask_dd">
 							<select name="mask" id="field_mask" onchange="updateInputBoxes2();">
 								<option value="nohtml"', $context['field']['mask'] == 'nohtml' ? ' selected' : '', '>No HTML Tags</option>
 								<option value="img"', $context['field']['mask'] == 'img' ? ' selected' : '', '>Image Attachment</option>
-								<option value="number"', $context['field']['mask'] == 'number' ? ' selected' : '', '>', $txt['pf_mask_number'], '</option>
-								<option value="float"', $context['field']['mask'] == 'float' ? ' selected' : '', '>', $txt['pf_mask_float'], '</option>
-								<option value="email"', $context['field']['mask'] == 'email' ? ' selected' : '', '>', $txt['pf_mask_email'], '</option>
-								<option value="regex"', $context['field']['mask'] == 'regex' ? ' selected' : '', '>', $txt['pf_mask_regex'], '</option>
+								<option value="number"', $context['field']['mask'] == 'number' ? ' selected' : '', '>', $txt['PostFields_mask_number'], '</option>
+								<option value="float"', $context['field']['mask'] == 'float' ? ' selected' : '', '>', $txt['PostFields_mask_float'], '</option>
+								<option value="email"', $context['field']['mask'] == 'email' ? ' selected' : '', '>', $txt['PostFields_mask_email'], '</option>
+								<option value="regex"', $context['field']['mask'] == 'regex' ? ' selected' : '', '>', $txt['PostFields_mask_regex'], '</option>
 							</select>
 						</dd>
 						<dt id="regex_dt">
 							<a id="post_regex" href="', $scripturl, '?action=helpadmin;help=post_regex" onclick="return reqWin(this);" class="help" title="', $txt['help'], '"></a>
-							<strong>', $txt['pf_regex'], ':</strong>
-							<br /><span class="smalltext">', $txt['pf_regex_desc'], '</span>
+							<strong>', $txt['PostFields_regex'], ':</strong>
+							<br /><span class="smalltext">', $txt['PostFields_regex_desc'], '</span>
 						</dt>
 						<dd id="regex_dd">
 							<input type="text" name="regex" value="', $context['field']['regex'], '" size="30">
 						</dd>
 						<dt id="can_search_dt">
-							<strong>', $txt['pf_can_search'], ':</strong>
-							<br /><span class="smalltext">', $txt['pf_can_search_desc'], '</span>
+							<strong>', $txt['PostFields_can_search'], ':</strong>
+							<br /><span class="smalltext">', $txt['PostFields_can_search_desc'], '</span>
 						</dt>
 						<dd id="can_search_dd">
 							<input type="checkbox" name="can_search"', $context['field']['can_search'] ? ' checked' : '', '>
 						</dd>
 						<dt>
-							<strong>', $txt['pf_active'], ':</strong>
-							<br /><span class="smalltext">', $txt['pf_active_desc'], '</span>
+							<strong>', $txt['PostFields_active'], ':</strong>
+							<br /><span class="smalltext">', $txt['PostFields_active_desc'], '</span>
 						</dt>
 						<dd>
 							<input type="checkbox" name="active"', $context['field']['active'] ? ' checked' : '', '>
@@ -198,7 +198,7 @@ function template_edit()
 
 	if ($context['fid'])
 		echo '
-					<input type="submit" name="delete" value="', $txt['delete'], '" onclick="return confirm(', JavaScriptEscape($txt['pf_delete_sure']), ');" class="delete">';
+					<input type="submit" name="delete" value="', $txt['delete'], '" onclick="return confirm(', JavaScriptEscape($txt['PostFields_delete_sure']), ');" class="delete">';
 
 	echo '
 				</div></div>
