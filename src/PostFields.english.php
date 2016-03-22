@@ -5,7 +5,7 @@ $txt['PostFields_desc'] = 'All of your post fields are shown here.';
 $txt['PostFields_menu_index'] = 'List Current Fields';
 $txt['PostFields_menu_edit'] = 'Add a New Field';
 $txt['PostFields_add'] = 'Add';
-$txt['PostFields_title'] = 'Edit';
+$txt['PostFields_edit'] = 'Edit';
 $txt['PostFields_desc'] = 'From this page you can create your own post fields that fit in with your own forum\'s requirements.';
 $txt['PostFields_active'] = 'Active';
 $txt['PostFields_fieldname'] = 'Field Name';
@@ -58,5 +58,3 @@ $txt['PostFields_delete_sure'] = 'Are you sure you wish to delete this field - a
 
 // Validation errors
 $txt['error_pf_invalid_value'] = 'The value you chose for %1$s is invalid.';
-
-?>
