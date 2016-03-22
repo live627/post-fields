@@ -36,7 +36,7 @@ class Admin extends \Suki\Ohara
 			checkSession();
 
 			// Delete the user data first.
-			$smcFunc['db_query']('', '
+			Database::query('', '
 				DELETE FROM {db_prefix}message_data
 				WHERE id_field IN ({array_int:fields})',
 				array(
@@ -44,7 +44,7 @@ class Admin extends \Suki\Ohara
 				)
 			);
 			// Finally - the fields themselves are gone!
-			$smcFunc['db_query']('', '
+			Database::query('', '
 				DELETE FROM {db_prefix}message_fields
 				WHERE id_field IN ({array_int:fields})',
 				array(
@@ -59,11 +59,11 @@ class Admin extends \Suki\Ohara
 		if (isset($_POST['save']))
 		{
 			checkSession();
-			foreach (getFields() as $field)
+			foreach ($this->util->getFields() as $field)
 			{
 				$bbc = !empty($_POST['bbc'][$field['id_field']]) ? 'yes' : 'no';
 				if ($bbc != $field['bbc'])
-					$smcFunc['db_query']('', '
+					Database::query('', '
 						UPDATE {db_prefix}message_fields
 						SET bbc = {string:bbc}
 						WHERE id_field = {int:field}',
@@ -75,7 +75,7 @@ class Admin extends \Suki\Ohara
 
 				$active = !empty($_POST['active'][$field['id_field']]) ? 'yes' : 'no';
 				if ($active != $field['active'])
-					$smcFunc['db_query']('', '
+					Database::query('', '
 						UPDATE {db_prefix}message_fields
 						SET active = {string:active}
 						WHERE id_field = {int:field}',
@@ -87,7 +87,7 @@ class Admin extends \Suki\Ohara
 
 				$can_search = !empty($_POST['can_search'][$field['id_field']]) ? 'yes' : 'no';
 				if ($can_search != $field['can_search'])
-					$smcFunc['db_query']('', '
+					Database::query('', '
 						UPDATE {db_prefix}message_fields
 						SET can_search = {string:can_search}
 						WHERE id_field = {int:field}',
@@ -269,7 +269,7 @@ class Admin extends \Suki\Ohara
 		$context['html_headers'] .= '<script type="text/javascript" src="' . $this->settings['default_theme_url'] . '/scripts/postfieldsadmin.js"></script>';
 		loadTemplate('PostFields');
 
-		$request = $smcFunc['db_query']('', '
+		$request = Database::query('', '
 			SELECT b.id_board, b.name AS board_name, c.name AS cat_name
 			FROM {db_prefix}boards AS b
 				LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
@@ -279,15 +279,15 @@ class Admin extends \Suki\Ohara
 			)
 		);
 		$context['boards'] = array();
-		while ($row = $smcFunc['db_fetch_assoc']($request))
+		while ($row = Database::fetch_assoc($request))
 			$context['boards'][$row['id_board']] = $row['cat_name'] . ' - ' . $row['board_name'];
-		$smcFunc['db_free_result']($request);
+		Database::free_result($request);
 
 		loadLanguage('Profile');
 
 		if ($context['fid'])
 		{
-			$request = $smcFunc['db_query']('', '
+			$request = Database::query('', '
 				SELECT *
 				FROM {db_prefix}message_fields
 				WHERE id_field = {int:current_field}',
@@ -296,7 +296,7 @@ class Admin extends \Suki\Ohara
 				)
 			);
 			$context['field'] = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
+			while ($row = Database::fetch_assoc($request))
 			{
 				if ($row['type'] == 'textarea')
 					@list ($rows, $cols) = @explode(',', $row['default_value']);
@@ -326,7 +326,7 @@ class Admin extends \Suki\Ohara
 					'groups' => !empty($row['groups']) ? explode(',', $row['groups']) : array(),
 				);
 			}
-			$smcFunc['db_free_result']($request);
+			Database::free_result($request);
 		}
 
 		// Setup the default values as needed.
@@ -440,7 +440,7 @@ class Admin extends \Suki\Ohara
 
 			if ($context['fid'])
 			{
-				$smcFunc['db_query']('', '
+				Database::query('', '
 					UPDATE {db_prefix}message_fields
 					SET
 						' . implode(',
@@ -451,7 +451,7 @@ class Admin extends \Suki\Ohara
 			}
 			else
 			{
-				$smcFunc['db_insert']('',
+				Database::insert('',
 					'{db_prefix}message_fields',
 					$in_col,
 					$in_data,
@@ -460,7 +460,7 @@ class Admin extends \Suki\Ohara
 			}
 
 			/* // As there's currently no option to priorize certain fields over others, let's order them alphabetically.
-			$smcFunc['db_query']('', '
+			Database::query('', '
 				ALTER TABLE {db_prefix}message_fields
 				ORDER BY name',
 				array(
@@ -474,7 +474,7 @@ class Admin extends \Suki\Ohara
 			checkSession();
 
 			// Delete the user data first.
-			$smcFunc['db_query']('', '
+			Database::query('', '
 				DELETE FROM {db_prefix}message_data
 				WHERE id_field = {int:current_field}',
 				array(
@@ -482,7 +482,7 @@ class Admin extends \Suki\Ohara
 				)
 			);
 			// Finally - the field itself is gone!
-			$smcFunc['db_query']('', '
+			Database::query('', '
 				DELETE FROM {db_prefix}message_fields
 				WHERE id_field = {int:current_field}',
 				array(
