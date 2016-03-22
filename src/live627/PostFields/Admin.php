@@ -23,11 +23,12 @@ class Admin extends \Suki\Ohara
 	public function __construct()
 	{
 		$this->util = new Util();
+		$this->setRegistry();
 	}
 
 	public function Index()
 	{
-		global $txt, $context, $sourcedir, $smcFunc, $scripturl;
+		global $context, $smcFunc;
 
 		// Deleting?
 		if (isset($_POST['delete'], $_POST['remove']))
@@ -106,9 +107,9 @@ class Admin extends \Suki\Ohara
 
 		$listOptions = array(
 			'id' => 'pf_fields',
-			'base_href' => $scripturl . '?action=action=admin;area=postfields',
+			'base_href' => $this->scriptUrl . '?action=admin;area=postfields',
 			'default_sort_col' => 'name',
-			'no_items_label' => $txt['pf_none'],
+			'no_items_label' => $this->text('none'),
 			'items_per_page' => 25,
 			'get_items' => array(
 				'function' => ['live627\PostFields\Admin', 'list_getPostFields'],
@@ -119,15 +120,14 @@ class Admin extends \Suki\Ohara
 			'columns' => array(
 				'name' => array(
 					'header' => array(
-						'value' => $txt['pf_fieldname'],
+						'value' => $this->text('fieldname'),
 						'style' => 'text-align: left;',
 					),
 					'data' => array(
-						'function' => create_function('$rowData', '
-							global $scripturl;
-
-							return sprintf(\'<a href="%1$s?action=admin;area=postfields;sa=edit;fid=%2$d">%3$s</a><div class="smalltext">%4$s</div>\', $scripturl, $rowData[\'id_field\'], $rowData[\'name\'], $rowData[\'description\']);
-						'),
+						'function' => function ($rowData)
+						{
+							return sprintf('<a href="%1$s?action=admin;area=postfields;sa=edit;fid=%2$d">%3$s</a><div class="smalltext">%4$s</div>', $this->scriptUrl, $rowData['id_field'], $rowData['name'], $rowData['description']);
+						},
 						'style' => 'width: 40%;',
 					),
 					'sort' => array(
@@ -137,15 +137,14 @@ class Admin extends \Suki\Ohara
 				),
 				'type' => array(
 					'header' => array(
-						'value' => $txt['pf_fieldtype'],
+						'value' => $this->text('fieldtype'),
 					),
 					'data' => array(
-						'function' => create_function('$rowData', '
-							global $txt;
-
-							$textKey = sprintf(\'pf_type_%1$s\', $rowData[\'type\']);
-							return isset($txt[$textKey]) ? $txt[$textKey] : $textKey;
-						'),
+						'function' => function ($rowData)
+						{
+							$textKey = sprintf('type_%1$s', $rowData['type']);
+							return $this->text($textKey);
+						},
 						'style' => 'width: 10%; text-align: center;',
 					),
 					'sort' => array(
@@ -155,14 +154,14 @@ class Admin extends \Suki\Ohara
 				),
 				'bbc' => array(
 					'header' => array(
-						'value' => $txt['pf_bbc'],
+						'value' => $this->text('bbc'),
 					),
 					'data' => array(
-						'function' => create_function('$rowData', '
-							global $txt;
-							$isChecked = $rowData[\'bbc\'] == \'no\' ? \'\' : \' checked\';
-							return sprintf(\'<span id="bbc_%1$s" class="color_%4$s">%3$s</span>&nbsp;<input type="checkbox" name="bbc[%1$s]" id="bbc_%1$s" value="%1$s"%2$s>\', $rowData[\'id_field\'], $isChecked, $txt[$rowData[\'bbc\']], $rowData[\'bbc\']);
-						'),
+						'function' => function ($rowData)
+						{
+							$isChecked = $rowData['bbc'] == 'no' ? '' : ' checked';
+							return sprintf('<span id="bbc_%1$s" class="color_%4$s">%3$s</span>&nbsp;<input type="checkbox" name="bbc[%1$s]" id="bbc_%1$s" value="%1$s"%2$s>', $rowData['id_field'], $isChecked, $this->text($rowData['bbc']), $rowData['bbc']);
+						},
 						'style' => 'width: 10%; text-align: center;',
 					),
 					'sort' => array(
@@ -172,14 +171,14 @@ class Admin extends \Suki\Ohara
 				),
 				'active' => array(
 					'header' => array(
-						'value' => $txt['pf_active'],
+						'value' => $this->text('active'),
 					),
 					'data' => array(
-						'function' => create_function('$rowData', '
-							global $txt;
-							$isChecked = $rowData[\'active\'] == \'no\' ? \'\' : \' checked\';
-							return sprintf(\'<span id="active_%1$s" class="color_%4$s">%3$s</span>&nbsp;<input type="checkbox" name="active[%1$s]" id="active_%1$s" value="%1$s"%2$s>\', $rowData[\'id_field\'], $isChecked, $txt[$rowData[\'active\']], $rowData[\'active\']);
-						'),
+						'function' => function ($rowData)
+						{
+							$isChecked = $rowData['active'] == 'no' ? '' : ' checked';
+							return sprintf('<span id="active_%1$s" class="color_%4$s">%3$s</span>&nbsp;<input type="checkbox" name="active[%1$s]" id="active_%1$s" value="%1$s"%2$s>', $rowData['id_field'], $isChecked, $this->text($rowData['active']), $rowData['active']);
+						},
 						'style' => 'width: 10%; text-align: center;',
 					),
 					'sort' => array(
@@ -189,14 +188,14 @@ class Admin extends \Suki\Ohara
 				),
 				'can_search' => array(
 					'header' => array(
-						'value' => $txt['pf_can_search'],
+						'value' => $this->text('can_search'),
 					),
 					'data' => array(
-						'function' => create_function('$rowData', '
-							global $txt;
-							$isChecked = $rowData[\'can_search\'] == \'no\' ? \'\' : \' checked\';
-							return sprintf(\'<span id="can_search_%1$s" class="color_%4$s">%3$s</span>&nbsp;<input type="checkbox" name="can_search[%1$s]" id="can_search_%1$s" value="%1$s"%2$s>\', $rowData[\'id_field\'], $isChecked, $txt[$rowData[\'can_search\']], $rowData[\'can_search\']);
-						'),
+						'function' => function ($rowData)
+						{
+							$isChecked = $rowData['can_search'] == 'no' ? '' : ' checked';
+							return sprintf('<span id="can_search_%1$s" class="color_%4$s">%3$s</span>&nbsp;<input type="checkbox" name="can_search[%1$s]" id="can_search_%1$s" value="%1$s"%2$s>', $rowData['id_field'], $isChecked, $this->text($rowData['can_search']), $rowData['can_search']);
+						},
 						'style' => 'width: 10%; text-align: center;',
 					),
 					'sort' => array(
@@ -206,11 +205,11 @@ class Admin extends \Suki\Ohara
 				),
 				'modify' => array(
 					'header' => array(
-						'value' => $txt['modify'],
+						'value' => $this->text('modify'),
 					),
 					'data' => array(
 						'sprintf' => array(
-							'format' => '<a href="' . $scripturl . '?action=admin;area=postfields;sa=edit;fid=%1$s">' . $txt['modify'] . '</a>',
+							'format' => '<a href="' . $this->scriptUrl . '?action=admin;area=postfields;sa=edit;fid=%1$s">' . $this->text('modify') . '</a>',
 							'params' => array(
 								'id_field' => false,
 							),
@@ -220,13 +219,13 @@ class Admin extends \Suki\Ohara
 				),
 				'remove' => array(
 					'header' => array(
-						'value' => $txt['remove'],
+						'value' => $this->text('remove'),
 					),
 					'data' => array(
-						'function' => create_function('$rowData', '
-							global $txt;
-							return sprintf(\'<span id="remove_%1$s" class="color_no">%2$s</span>&nbsp;<input type="checkbox" name="remove[%1$s]" id="remove_%1$s" value="%1$s">\', $rowData[\'id_field\'], $txt[\'no\']);
-						'),
+						'function' => function ($rowData)
+						{
+							return sprintf('<span id="remove_%1$s" class="color_no">%2$s</span>&nbsp;<input type="checkbox" name="remove[%1$s]" id="remove_%1$s" value="%1$s">', $rowData['id_field'], $this->text('no'));
+						},
 						'style' => 'width: 10%; text-align: center;',
 					),
 					'sort' => array(
@@ -236,18 +235,18 @@ class Admin extends \Suki\Ohara
 				),
 			),
 			'form' => array(
-				'href' => $scripturl . '?action=admin;area=postfields',
+				'href' => $this->scriptUrl . '?action=admin;area=postfields',
 				'name' => 'postProfileFields',
 			),
 			'additional_rows' => array(
 				array(
 					'position' => 'below_table_data',
-					'value' => '<input type="submit" name="save" value="' . $txt['save'] . '" class="submit">&nbsp;&nbsp;<input type="submit" name="delete" value="' . $txt['delete'] . '" onclick="return confirm(' . JavaScriptEscape($txt['pf_delete_sure']) . ');" class="delete">&nbsp;&nbsp;<input type="submit" name="new" value="' . $txt['pf_make_new'] . '" class="new">',
+					'value' => '<input type="submit" name="save" value="' . $this->text('save') . '" class="submit">&nbsp;&nbsp;<input type="submit" name="delete" value="' . $this->text('delete') . '" onclick="return confirm(' . JavaScriptEscape($this->text('delete_sure')) . ');" class="delete">&nbsp;&nbsp;<input type="submit" name="new" value="' . $this->text('make_new') . '" class="new">',
 					'style' => 'text-align: right;',
 				),
 			),
 		);
-		require_once($sourcedir . '/Subs-List.php');
+		require_once($this->sourceDir . '/Subs-List.php');
 		call_integration_hook('integrate_list_post_fields', array(&$listOptions));
 		createList($listOptions);
 		$context['sub_template'] = 'show_list';
@@ -256,11 +255,11 @@ class Admin extends \Suki\Ohara
 
 	function Edit()
 	{
-		global $txt, $scripturl, $context, $settings, $smcFunc;
+		global $context;
 
 		$context['fid'] = isset($_REQUEST['fid']) ? (int) $_REQUEST['fid'] : 0;
-		$context['page_title'] = $this->text('title') . ' - ' . ($context['fid'] ? $txt['pf_title'] : $txt['pf_add']);
-		$context['html_headers'] .= '<script type="text/javascript" src="' . $settings['default_theme_url'] . '/scripts/postfieldsadmin.js"></script>';
+		$context['page_title'] = $this->text('title') . ' - ' . ($context['fid'] ? $this->text('edit') : $this->text('add'));
+		$context['html_headers'] .= '<script type="text/javascript" src="' . $this->settings['default_theme_url'] . '/scripts/postfieldsadmin.js"></script>';
 		loadTemplate('PostFields');
 
 		$request = $smcFunc['db_query']('', '
