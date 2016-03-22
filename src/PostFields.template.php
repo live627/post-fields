@@ -6,10 +6,10 @@ function template_edit()
 
 	echo '
 	<div id="admincenter">
-		<form action="', $scripturl, '?action=admin;area=postfields;sa=edit" method="post" accept-charset="UTF-8" id="invertAllRequiresThis">
+		<form action="', $scripturl, '?action=admin;area=postfields;sa=edit" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
 				<h3 class="catbg">
-					', $context['page_title2'], '
+					', $context['page_title'], '
 				</h3>
 			</div>
 			<div class="windowbg2">
@@ -278,5 +278,3 @@ function template_search_post_fields_simple()
 				</dl>
 		</fieldset>';
 }
-
-?>
