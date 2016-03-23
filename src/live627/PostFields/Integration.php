@@ -246,7 +246,7 @@ class Integration
         self::remove_messages((array)$message, $decreasePostCount);
     }
 
-    public static function remove_messages($message, $decreasePostCount)
+    public static function remove_messages($messages, $decreasePostCount)
     {
         global $smcFunc;
 
