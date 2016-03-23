@@ -81,7 +81,7 @@ abstract class postFieldsBase implements postFields
 	 * Returns the input so the user can enter a value.
 	 *
 	 * @access public
-	 * @return mixed
+	 * @return string
 	 */
 	public function getInputHtml()
 	{
@@ -92,7 +92,7 @@ abstract class postFieldsBase implements postFields
 	 * Returns the output. It's the field's value formatted acccording to its criteria.
 	 *
 	 * @access public
-	 * @return mixed
+	 * @return string
 	 */
 	public function getOutputHtml()
 	{
@@ -128,8 +128,9 @@ class postFields_select extends postFieldsBase
 		{
 			$true = (!$this->exists && $this->field['default_value'] == $v) || $this->value == $v;
 			$this->input_html .= '<option' . ($true ? ' selected="selected"' : '') . '>' . $v . '</option>';
-			if ($true)
-				$this->output_html = $v;
+			if ($true) {
+							$this->output_html = $v;
+			}
 		}
 
 		$this->input_html .= '</select>';
@@ -165,8 +166,9 @@ class postFields_radio extends postFieldsBase
 		{
 			$true = (!$this->exists && $this->field['default_value'] == $v) || $this->value == $v;
 			$this->input_html .= '<label><input type="radio" name="postfield[' . $this->field['id_field'] . ']"' . ($true ? ' checked="checked"' : '') . '> ' . $v . '</label><br>';
-			if ($true)
-				$this->output_html = $v;
+			if ($true) {
+							$this->output_html = $v;
+			}
 		}
 		$this->input_html .= '</fieldset>';
 	}
@@ -191,17 +193,20 @@ class postFields_text extends postFieldsBase
 	}
 	public function validate()
 	{
-		if (!empty($this->field['length']))
-			$value = substr($this->value, 0, $this->field['length']);
+		if (!empty($this->field['length'])) {
+					$value = substr($this->value, 0, $this->field['length']);
+		}
 
 		$class_name = '\\live627\\PostFields\\postFieldMask_' . $this->field['mask'];
-		if (!class_exists($class_name))
-			fatal_error('Mask "' . $this->field['mask'] . '" not found for field "' . $this->field['name'] . '" at ID #' . $this->field['id_field'] . '.', false);
+		if (!class_exists($class_name)) {
+					fatal_error('Mask "' . $this->field['mask'] . '" not found for field "' . $this->field['name'] . '" at ID #' . $this->field['id_field'] . '.', false);
+		}
 
 		$mask = new $class_name($this->value, $this->field);
 		$mask->validate();
-		if (false !== ($err = $mask->getError()))
-			$this->err = $err;
+		if (false !== ($err = $mask->getError())) {
+					$this->err = $err;
+		}
 	}
 }
 
@@ -249,8 +254,9 @@ class postFieldMask_email extends postFieldMaskBase
 	public function validate()
 	{
 		global $txt;
-		if (!filter_var($this->value, FILTER_VALIDATE_EMAIL))
-			$this->err = array('pf_invalid_value', $this->field['name']);
+		if (!filter_var($this->value, FILTER_VALIDATE_EMAIL)) {
+					$this->err = array('pf_invalid_value', $this->field['name']);
+		}
 	}
 }
 
@@ -259,11 +265,12 @@ class postFieldMask_regex extends postFieldMaskBase
 	public function validate()
 	{
 		global $txt;
-		if (!preg_match($this->field['regex'], $this->value))
-			if (!empty($this->field['err']))
+		if (!preg_match($this->field['regex'], $this->value)) {
+					if (!empty($this->field['err']))
 				$this->err = $this->field['err'];
-			else
-				$this->err = array('pf_invalid_value', $this->field['name']);
+		} else {
+							$this->err = array('pf_invalid_value', $this->field['name']);
+			}
 	}
 }
 
@@ -272,8 +279,9 @@ class postFieldMask_number extends postFieldMaskBase
 	public function validate()
 	{
 		global $txt;
-		if (!preg_match('/^\s*([0-9]+)\s*$/', $this->value))
-			$this->err = array('pf_invalid_value', $this->field['name']);
+		if (!preg_match('/^\s*([0-9]+)\s*$/', $this->value)) {
+					$this->err = array('pf_invalid_value', $this->field['name']);
+		}
 	}
 }
 
@@ -282,8 +290,9 @@ class postFieldMask_float extends postFieldMaskBase
 	public function validate()
 	{
 		global $txt;
-		if (!preg_match('/^\s*([0-9]+(\.[0-9]+)?)\s*$/', $this->value))
-			$this->err = array('pf_invalid_value', $this->field['name']);
+		if (!preg_match('/^\s*([0-9]+(\.[0-9]+)?)\s*$/', $this->value)) {
+					$this->err = array('pf_invalid_value', $this->field['name']);
+		}
 	}
 }
 
@@ -292,8 +301,9 @@ class postFieldMask_nohtml extends postFieldMaskBase
 	public function validate()
 	{
 		global $txt;
-		if (strip_tags($this->value) != $this->value)
-			$this->err = array('pf_invalid_value', $this->field['name']);
+		if (strip_tags($this->value) != $this->value) {
+					$this->err = array('pf_invalid_value', $this->field['name']);
+		}
 	}
 }
 

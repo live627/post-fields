@@ -183,14 +183,15 @@ class Util extends \Suki\Ohara
 			)
 		);
 		while ($row = $smcFunc['db_fetch_assoc']($request)) {
-					if (!in_array($row['id_group'], $disallowed))
-				$groups[(int) $row['id_group']] = array(
+					if (!in_array($row['id_group'], $disallowed)) {
+									$groups[(int) $row['id_group']] = array(
 					'id' => $row['id_group'],
 					'name' => trim($row['group_name']),
 					'checked' => in_array($row['id_group'], $checked) || in_array(-3, $checked),
 					'is_post_group' => $row['min_posts'] != -1,
 					'color' => $row['online_color'],
 				);
+					}
 		}
 		$smcFunc['db_free_result']($request);
 

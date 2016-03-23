@@ -50,8 +50,9 @@ class Integration
 	{
 		global $board, $context, $options, $smcFunc;
 
-		if (empty($fields))
-			return;
+		if (empty($fields)) {
+					return;
+		}
 
 		$context['fields'] = array();
 		$value = '';
@@ -70,8 +71,9 @@ class Integration
 				)
 			);
 			$values = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-				$values[$row['id_field']] = isset($row['value']) ? $row['value'] : '';
+			while ($row = $smcFunc['db_fetch_assoc']($request)) {
+							$values[$row['id_field']] = isset($row['value']) ? $row['value'] : '';
+			}
 			$smcFunc['db_free_result']($request);
 		}
 		foreach ($fields as $field)
@@ -80,11 +82,13 @@ class Integration
 			if (isset($_POST['postfield'], $_POST['postfield'][$field['id_field']]))
 			{
 				$value = $smcFunc['htmlspecialchars']($_POST['postfield'][$field['id_field']]);
-				if (in_array($field['type'], array('select', 'radio')))
-					$value = ($options = explode(',', $field['options'])) && isset($options[$value]) ? $options[$value] : '';
+				if (in_array($field['type'], array('select', 'radio'))) {
+									$value = ($options = explode(',', $field['options'])) && isset($options[$value]) ? $options[$value] : '';
+				}
 			}
-			if (isset($values[$field['id_field']]))
-				$value = $values[$field['id_field']];
+			if (isset($values[$field['id_field']])) {
+							$value = $values[$field['id_field']];
+			}
 			$exists = !empty($value);
 			$context['fields'][] = (new Util)->renderField($field, $value, $exists);
 		}
@@ -122,8 +126,9 @@ class Integration
 				)
 			);
 			$values = array();
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-				$values[$row['id_field']] = isset($row['value']) ? $row['value'] : '';
+			while ($row = $smcFunc['db_fetch_assoc']($request)) {
+							$values[$row['id_field']] = isset($row['value']) ? $row['value'] : '';
+			}
 			$smcFunc['db_free_result']($request);
 		}
 
@@ -141,14 +146,16 @@ class Integration
 			$topic_value = $topic_value != $_REQUEST['msg'];
 			$smcFunc['db_free_result']($request);
 		}
-		foreach ($field_list as $field)
-			if ((empty($topic) || empty($topic_value)) && $field['topic_only'] == 'yes')
+		foreach ($field_list as $field) {
+					if ((empty($topic) || empty($topic_value)) && $field['topic_only'] == 'yes')
 			{
 				$value = isset($_POST['postfield'][$field['id_field']]) ? $_POST['postfield'][$field['id_field']] : '';
+		}
 				$class_name = 'postFields_' . $field['type'];
 
-				if (!class_exists($class_name) || (isset($values[$field['id_field']]) && $values[$field['id_field']] == $value))
-					continue;
+				if (!class_exists($class_name) || (isset($values[$field['id_field']]) && $values[$field['id_field']] == $value)) {
+									continue;
+				}
 
 				$type = new $class_name($field, $value, !empty($value));
 				$changes[] = array($field['id_field'], $type->getValue(), $msgOptions['id']);
@@ -176,8 +183,8 @@ class Integration
 				array('id_field', 'id_msg')
 			);
 
-			if (!empty($log_changes) && !empty($modSettings['modlog_enabled']))
-				$smcFunc['db_insert']('',
+			if (!empty($log_changes) && !empty($modSettings['modlog_enabled'])) {
+							$smcFunc['db_insert']('',
 					'{db_prefix}log_actions',
 					array(
 						'action' => 'string', 'id_log' => 'int', 'log_time' => 'int', 'id_member' => 'int', 'ip' => 'string-16',
@@ -186,6 +193,7 @@ class Integration
 					$log_changes,
 					array('id_action')
 				);
+			}
 		}
 	}
 
@@ -193,12 +201,14 @@ class Integration
 	{
 		global $board, $context, $sourcedir, $smcFunc, $topic;
 
-		foreach ($post_errors as $id => $post_error)
-			if ($post_error == 'no_message')
+		foreach ($post_errors as $id => $post_error) {
+					if ($post_error == 'no_message')
 				unset($post_errors[$id]);
+		}
 
-		if (isset($_POST['postfield']))
-			$_POST['postfield'] = htmlspecialchars__recursive($_POST['postfield']);
+		if (isset($_POST['postfield'])) {
+					$_POST['postfield'] = htmlspecialchars__recursive($_POST['postfield']);
+		}
 
 		$field_list = (new Util)->filterFields($board);
 		require_once($sourcedir . '/Class-PostFields.php');
@@ -218,18 +228,21 @@ class Integration
 			$topic_value = $topic_value != $_REQUEST['msg'];
 			$smcFunc['db_free_result']($request);
 		}
-		foreach ($field_list as $field)
-			if ((empty($topic) || empty($topic_value)) && $field['topic_only'] == 'yes')
+		foreach ($field_list as $field) {
+					if ((empty($topic) || empty($topic_value)) && $field['topic_only'] == 'yes')
 			{
 				$value = isset($_POST['postfield'][$field['id_field']]) ? $_POST['postfield'][$field['id_field']] : '';
+		}
 				$class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
-				if (!class_exists($class_name))
-					fatal_error('Param "' . $field['type'] . '" not found for field "' . $field['name'] . '" at ID #' . $field['id_field'] . '.', false);
+				if (!class_exists($class_name)) {
+									fatal_error('Param "' . $field['type'] . '" not found for field "' . $field['name'] . '" at ID #' . $field['id_field'] . '.', false);
+				}
 
 				$type = new $class_name($field, $value, !empty($value));
 				$type->validate();
-				if (false !== ($err = $type->getError()))
-					$post_errors[] = $err;
+				if (false !== ($err = $type->getError())) {
+									$post_errors[] = $err;
+				}
 			}
 	}
 
@@ -242,14 +255,15 @@ class Integration
 	{
 		global $smcFunc;
 
-		if (!empty($messages))
-			$smcFunc['db_query']('', '
+		if (!empty($messages)) {
+					$smcFunc['db_query']('', '
 				DELETE FROM {db_prefix}message_field_data
 				WHERE id_msg IN ({array_int:message_list})',
 				array(
 					'message_list' => $messages,
 				)
 			);
+		}
 	}
 
 	public static function remove_topics($topics, $decreasePostCount, $ignoreRecycling)
@@ -265,21 +279,24 @@ class Integration
 				'topics' => $topics,
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
-			$messages[] = $row['id_msg'];
+		while ($row = $smcFunc['db_fetch_assoc']($request)) {
+					$messages[] = $row['id_msg'];
+		}
 
 		$smcFunc['db_free_result']($request);
 
-		if (!empty($messages))
-			self::remove_messages($messages, $decreasePostCount);
+		if (!empty($messages)) {
+					self::remove_messages($messages, $decreasePostCount);
+		}
 	}
 
 	public static function display_topics($topic_ids)
 	{
 		global $smcFunc;
 
-		if (empty($topic_ids))
-			return;
+		if (empty($topic_ids)) {
+					return;
+		}
 
 		$messages = array();
 		$request = $smcFunc['db_query']('', '
@@ -290,13 +307,15 @@ class Integration
 				'topics' => $topic_ids,
 			)
 		);
-		while ($row = $smcFunc['db_fetch_row']($request))
-			$messages[] = $row[0];
+		while ($row = $smcFunc['db_fetch_row']($request)) {
+					$messages[] = $row[0];
+		}
 
 		$smcFunc['db_free_result']($request);
 
-		if (!empty($messages))
-			self::display_message_list($messages, true);
+		if (!empty($messages)) {
+					self::display_message_list($messages, true);
+		}
 	}
 
 	public static function display_message_list($messages, $is_message_index = false)
@@ -306,8 +325,9 @@ class Integration
 		$util = new Util();
 		$field_list = $util->filterFields($board, $is_message_index);
 
-		if (empty($field_list))
-			return;
+		if (empty($field_list)) {
+					return;
+		}
 
 		$request = $smcFunc['db_query']('', '
 			SELECT *
@@ -354,21 +374,25 @@ class Integration
 				if ($field['id_field'] == 4)
 				{
 					$field = $context['fields'][$output['id']][3];
-					if ($field['output_html'] == 'Fixed')
-						$field['output_html'] = '£ ' . $context['fields'][$output['id']][4]['output_html'];
+					if ($field['output_html'] == 'Fixed') {
+											$field['output_html'] = '£ ' . $context['fields'][$output['id']][4]['output_html'];
+					}
 				}
 
-				if ($field['id_field'] == 5)
-					$field['output_html'] .= ' ' . $context['fields'][$output['id']][7]['output_html'];
+				if ($field['id_field'] == 5) {
+									$field['output_html'] .= ' ' . $context['fields'][$output['id']][7]['output_html'];
+				}
 
-				if ($field['id_field'] == 6)
-					$field['output_html'] .= ' ' . $context['fields'][$output['id']][8]['output_html'];
+				if ($field['id_field'] == 6) {
+									$field['output_html'] .= ' ' . $context['fields'][$output['id']][8]['output_html'];
+				}
 
-				if ($field['id_field'] == 5 || $field['id_field'] == 6 || $field['id_field'] == 10)
-					$body .= '
+				if ($field['id_field'] == 5 || $field['id_field'] == 6 || $field['id_field'] == 10) {
+									$body .= '
 							</dl>
 							<hr />
 							<dl class="settings" style="margin-top: 10px;">';
+				}
 
 				$body .= '
 								<dt>

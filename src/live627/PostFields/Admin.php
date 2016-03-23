@@ -62,8 +62,8 @@ class Admin extends \Suki\Ohara
 			foreach ($this->util->getFields() as $field)
 			{
 				$bbc = !empty($_POST['bbc'][$field['id_field']]) ? 'yes' : 'no';
-				if ($bbc != $field['bbc'])
-					Database::query('', '
+				if ($bbc != $field['bbc']) {
+									Database::query('', '
 						UPDATE {db_prefix}message_fields
 						SET bbc = {string:bbc}
 						WHERE id_field = {int:field}',
@@ -72,10 +72,11 @@ class Admin extends \Suki\Ohara
 							'field' => $field['id_field'],
 						)
 					);
+				}
 
 				$active = !empty($_POST['active'][$field['id_field']]) ? 'yes' : 'no';
-				if ($active != $field['active'])
-					Database::query('', '
+				if ($active != $field['active']) {
+									Database::query('', '
 						UPDATE {db_prefix}message_fields
 						SET active = {string:active}
 						WHERE id_field = {int:field}',
@@ -84,10 +85,11 @@ class Admin extends \Suki\Ohara
 							'field' => $field['id_field'],
 						)
 					);
+				}
 
 				$can_search = !empty($_POST['can_search'][$field['id_field']]) ? 'yes' : 'no';
-				if ($can_search != $field['can_search'])
-					Database::query('', '
+				if ($can_search != $field['can_search']) {
+									Database::query('', '
 						UPDATE {db_prefix}message_fields
 						SET can_search = {string:can_search}
 						WHERE id_field = {int:field}',
@@ -96,14 +98,16 @@ class Admin extends \Suki\Ohara
 							'field' => $field['id_field'],
 						)
 					);
+				}
 				call_integration_hook('integrate_update_post_field', array($field));
 			}
 			redirectexit('action=admin;area=postfields');
 		}
 
 		// New field?
-		if (isset($_POST['new']))
-			redirectexit('action=admin;area=postfields;sa=edit');
+		if (isset($_POST['new'])) {
+					redirectexit('action=admin;area=postfields;sa=edit');
+		}
 
 		$listOptions = array(
 			'id' => 'pf_fields',
@@ -119,7 +123,7 @@ class Admin extends \Suki\Ohara
 				),
 			),
 			'get_count' => array(
-				'function' => function ()
+				'function' => function()
 				{
 					return count($this->util->getFields());
 				}
@@ -131,7 +135,7 @@ class Admin extends \Suki\Ohara
 						'style' => 'text-align: left;',
 					),
 					'data' => array(
-						'function' => function ($rowData)
+						'function' => function($rowData)
 						{
 							return sprintf('<a href="%1$s?action=admin;area=postfields;sa=edit;fid=%2$d">%3$s</a><div class="smalltext">%4$s</div>', $this->scriptUrl, $rowData['id_field'], $rowData['name'], $rowData['description']);
 						},
@@ -147,7 +151,7 @@ class Admin extends \Suki\Ohara
 						'value' => $this->text('fieldtype'),
 					),
 					'data' => array(
-						'function' => function ($rowData)
+						'function' => function($rowData)
 						{
 							$textKey = sprintf('type_%1$s', $rowData['type']);
 							return $this->text($textKey);
@@ -164,7 +168,7 @@ class Admin extends \Suki\Ohara
 						'value' => $this->text('bbc'),
 					),
 					'data' => array(
-						'function' => function ($rowData)
+						'function' => function($rowData)
 						{
 							$isChecked = $rowData['bbc'] == 'no' ? '' : ' checked';
 							return sprintf('<span id="bbc_%1$s" class="color_%4$s">%3$s</span>&nbsp;<input type="checkbox" name="bbc[%1$s]" id="bbc_%1$s" value="%1$s"%2$s>', $rowData['id_field'], $isChecked, $this->text($rowData['bbc']), $rowData['bbc']);
@@ -181,7 +185,7 @@ class Admin extends \Suki\Ohara
 						'value' => $this->text('active'),
 					),
 					'data' => array(
-						'function' => function ($rowData)
+						'function' => function($rowData)
 						{
 							$isChecked = $rowData['active'] == 'no' ? '' : ' checked';
 							return sprintf('<span id="active_%1$s" class="color_%4$s">%3$s</span>&nbsp;<input type="checkbox" name="active[%1$s]" id="active_%1$s" value="%1$s"%2$s>', $rowData['id_field'], $isChecked, $this->text($rowData['active']), $rowData['active']);
@@ -198,7 +202,7 @@ class Admin extends \Suki\Ohara
 						'value' => $this->text('can_search'),
 					),
 					'data' => array(
-						'function' => function ($rowData)
+						'function' => function($rowData)
 						{
 							$isChecked = $rowData['can_search'] == 'no' ? '' : ' checked';
 							return sprintf('<span id="can_search_%1$s" class="color_%4$s">%3$s</span>&nbsp;<input type="checkbox" name="can_search[%1$s]" id="can_search_%1$s" value="%1$s"%2$s>', $rowData['id_field'], $isChecked, $this->text($rowData['can_search']), $rowData['can_search']);
@@ -229,7 +233,7 @@ class Admin extends \Suki\Ohara
 						'value' => $this->text('remove'),
 					),
 					'data' => array(
-						'function' => function ($rowData)
+						'function' => function($rowData)
 						{
 							return sprintf('<span id="remove_%1$s" class="color_no">%2$s</span>&nbsp;<input type="checkbox" name="remove[%1$s]" id="remove_%1$s" value="%1$s">', $rowData['id_field'], $this->text('no'));
 						},
@@ -279,8 +283,9 @@ class Admin extends \Suki\Ohara
 			)
 		);
 		$context['boards'] = array();
-		while ($row = Database::fetch_assoc($request))
-			$context['boards'][$row['id_board']] = $row['cat_name'] . ' - ' . $row['board_name'];
+		while ($row = Database::fetch_assoc($request)) {
+					$context['boards'][$row['id_board']] = $row['cat_name'] . ' - ' . $row['board_name'];
+		}
 		Database::free_result($request);
 
 		loadLanguage('Profile');
@@ -298,9 +303,9 @@ class Admin extends \Suki\Ohara
 			$context['field'] = array();
 			while ($row = Database::fetch_assoc($request))
 			{
-				if ($row['type'] == 'textarea')
-					@list ($rows, $cols) = @explode(',', $row['default_value']);
-				else
+				if ($row['type'] == 'textarea') {
+									@list ($rows, $cols) = @explode(',', $row['default_value']);
+				} else
 				{
 					$rows = 3;
 					$cols = 30;
@@ -330,8 +335,8 @@ class Admin extends \Suki\Ohara
 		}
 
 		// Setup the default values as needed.
-		if (empty($context['field']))
-			$context['field'] = array(
+		if (empty($context['field'])) {
+					$context['field'] = array(
 				'name' => '',
 				'description' => '',
 				'enclose' => '',
@@ -350,9 +355,10 @@ class Admin extends \Suki\Ohara
 				'boards' => array(),
 				'groups' => [-3],
 			);
+		}
 
 		$context['groups'] = $this->util->list_groups($context['field']['groups']);
-		$context['all_groups_checked'] = empty(array_diff_key($context['groups'], array_filter($context['groups'], function ($group) {
+		$context['all_groups_checked'] = empty(array_diff_key($context['groups'], array_filter($context['groups'], function($group) {
 			return $group['checked'];
 		})));
 		$context['all_boards_checked'] = empty(array_diff(array_keys($context['boards']), $context['field']['boards']));
@@ -362,8 +368,9 @@ class Admin extends \Suki\Ohara
 		{
 			checkSession();
 
-			if (trim($_POST['name']) == '')
-				fatal_lang_error('post_option_need_name');
+			if (trim($_POST['name']) == '') {
+							fatal_lang_error('post_option_need_name');
+			}
 			$_POST['name'] = $smcFunc['htmlspecialchars']($_POST['name']);
 			$_POST['description'] = $smcFunc['htmlspecialchars']($_POST['description']);
 
@@ -387,19 +394,22 @@ class Admin extends \Suki\Ohara
 					$v = $smcFunc['htmlspecialchars']($v);
 					$v = strtr($v, array(',' => ''));
 
-					if (trim($v) == '')
-						continue;
+					if (trim($v) == '') {
+											continue;
+					}
 
 					$newOptions[$k] = $v;
 
-					if (isset($_POST['default_select']) && $_POST['default_select'] == $k)
-						$default = $v;
+					if (isset($_POST['default_select']) && $_POST['default_select'] == $k) {
+											$default = $v;
+					}
 				}
 				$options = implode(',', $newOptions);
 			}
 
-			if ($_POST['type'] == 'textarea')
-				$default = (int) $_POST['rows'] . ',' . (int) $_POST['cols'];
+			if ($_POST['type'] == 'textarea') {
+							$default = (int) $_POST['rows'] . ',' . (int) $_POST['cols'];
+			}
 
 			$up_col = array(
 				'name = {string:name}', ' description = {string:description}', ' enclose = {string:enclose}',
@@ -448,8 +458,7 @@ class Admin extends \Suki\Ohara
 					WHERE id_field = {int:current_field}',
 					$up_data
 				);
-			}
-			else
+			} else
 			{
 				Database::insert('',
 					'{db_prefix}message_fields',
@@ -468,8 +477,7 @@ class Admin extends \Suki\Ohara
 				)
 			); */
 			redirectexit('action=admin;area=postfields');
-		}
-		elseif (isset($_POST['delete']) && $context['field']['colname'])
+		} elseif (isset($_POST['delete']) && $context['field']['colname'])
 		{
 			checkSession();
 
