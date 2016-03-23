@@ -258,9 +258,10 @@ function template_search_post_fields()
 	global $context, $scripturl;
 
 	if (!empty($context['fields'])) {
-			foreach (array_reverse($context['fields']) as $field)
-			if (is_callable('template_search_pf_' . $field['name']))
+			foreach (array_reverse($context['fields']) as $field) {
+						if (is_callable('template_search_pf_' . $field['name']))
 				call_user_func_array('template_search_pf_' . $field['name'], array($field));
+			}
 	} else {
 							echo '
 						<dt>

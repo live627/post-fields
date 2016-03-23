@@ -202,8 +202,9 @@ class Integration
 		global $board, $context, $sourcedir, $smcFunc, $topic;
 
 		foreach ($post_errors as $id => $post_error) {
-					if ($post_error == 'no_message')
-				unset($post_errors[$id]);
+					if ($post_error == 'no_message') {
+									unset($post_errors[$id]);
+					}
 		}
 
 		if (isset($_POST['postfield'])) {
