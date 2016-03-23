@@ -33,8 +33,9 @@ class Util extends \Suki\Ohara
 			$request = $smcFunc['db_query']('', '
 				SELECT *
 				FROM {db_prefix}message_fields');
-			while ($row = $smcFunc['db_fetch_assoc']($request))
-				$this->fields[$row['id_field']] = $row;
+			while ($row = $smcFunc['db_fetch_assoc']($request)) {
+							$this->fields[$row['id_field']] = $row;
+			}
 			$smcFunc['db_free_result']($request);
 		}
 		return $this->fields;
@@ -59,13 +60,15 @@ class Util extends \Suki\Ohara
 		foreach ($this->fields as $field)
 		{
 			$board_list = array_flip(explode(',', $field['boards']));
-			if (!isset($board_list[$board]))
-				continue;
+			if (!isset($board_list[$board])) {
+							continue;
+			}
 
 			$group_list = explode(',', $field['groups']);
 			$is_allowed = array_intersect($user_info['groups'], $group_list);
-			if (empty($is_allowed))
-				continue;
+			if (empty($is_allowed)) {
+							continue;
+			}
 
 			$list[$field['id_field']] = $field;
 		}
@@ -78,17 +81,20 @@ class Util extends \Suki\Ohara
 
 		require_once($sourcedir . '/Class-PostFields.php');
 		$class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
-		if (!class_exists($class_name))
-			fatal_error('Param "' . $field['type'] . '" not found for field "' . $field['name'] . '" at ID #' . $field['id_field'] . '.', false);
+		if (!class_exists($class_name)) {
+					fatal_error('Param "' . $field['type'] . '" not found for field "' . $field['name'] . '" at ID #' . $field['id_field'] . '.', false);
+		}
 
 		$param = new $class_name($field, $value, $exists);
 		$param->setHtml();
 		// Parse BBCode
-		if ($field['bbc'] == 'yes')
-			$param->output_html = parse_bbc($param->output_html);
+		if ($field['bbc'] == 'yes') {
+					$param->output_html = parse_bbc($param->output_html);
+		}
 		// Allow for newlines at least
-		elseif ($field['type'] == 'textarea')
-			$param->output_html = strtr($param->output_html, array("\n" => '<br>'));
+		elseif ($field['type'] == 'textarea') {
+					$param->output_html = strtr($param->output_html, array("\n" => '<br>'));
+		}
 
 		// Enclosing the user input within some other text?
 		if (!empty($field['enclose']) && !empty($param->output_html))
@@ -128,8 +134,9 @@ class Util extends \Suki\Ohara
 		global $context, $modSettings, $smcFunc, $sourcedir, $txt;
 
 		// We'll need this for loading up the names of each group.
-		if (!loadLanguage('ManageBoards'))
-			loadLanguage('ManageBoards');
+		if (!loadLanguage('ManageBoards')) {
+					loadLanguage('ManageBoards');
+		}
 
 		// Are we also looking up permissions?
 		if ($permission !== null)
@@ -140,8 +147,8 @@ class Util extends \Suki\Ohara
 		}
 
 		$groups = array();
-		if (!in_array(-1, $disallowed))
-			// Guests
+		if (!in_array(-1, $disallowed)) {
+					// Guests
 			$groups[-1] = array(
 				'id' => -1,
 				'name' => $txt['parent_guests_only'],
@@ -149,9 +156,10 @@ class Util extends \Suki\Ohara
 				'is_post_group' => false,
 				'color' => '',
 			);
+		}
 
-		if (!in_array(0, $disallowed))
-			// Regular Members
+		if (!in_array(0, $disallowed)) {
+					// Regular Members
 			$groups[0] = array(
 				'id' => 0,
 				'name' => $txt['parent_members_only'],
@@ -159,6 +167,7 @@ class Util extends \Suki\Ohara
 				'is_post_group' => false,
 				'color' => '',
 			);
+		}
 
 		// Load membergroups.
 		$request = $smcFunc['db_query']('', '
@@ -173,8 +182,8 @@ class Util extends \Suki\Ohara
 				'min_posts' => -1,
 			)
 		);
-		while ($row = $smcFunc['db_fetch_assoc']($request))
-			if (!in_array($row['id_group'], $disallowed))
+		while ($row = $smcFunc['db_fetch_assoc']($request)) {
+					if (!in_array($row['id_group'], $disallowed))
 				$groups[(int) $row['id_group']] = array(
 					'id' => $row['id_group'],
 					'name' => trim($row['group_name']),
@@ -182,6 +191,7 @@ class Util extends \Suki\Ohara
 					'is_post_group' => $row['min_posts'] != -1,
 					'color' => $row['online_color'],
 				);
+		}
 		$smcFunc['db_free_result']($request);
 
 		asort($groups);
