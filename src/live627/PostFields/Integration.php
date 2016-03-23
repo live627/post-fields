@@ -243,7 +243,7 @@ class Integration
 
     public static function remove_message($message, $decreasePostCount)
     {
-        self::remove_messages($message, $decreasePostCount);
+        self::remove_messages((array)$message, $decreasePostCount);
     }
 
     public static function remove_messages($message, $decreasePostCount)
