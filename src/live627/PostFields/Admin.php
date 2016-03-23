@@ -37,16 +37,16 @@ class Admin extends \Suki\Ohara
 
             // Delete the user data first.
             Database::query('', '
-				DELETE FROM {db_prefix}message_data
-				WHERE id_field IN ({array_int:fields})',
+                DELETE FROM {db_prefix}message_data
+                WHERE id_field IN ({array_int:fields})',
                 array(
                     'fields' => $_POST['remove'],
                 )
             );
             // Finally - the fields themselves are gone!
             Database::query('', '
-				DELETE FROM {db_prefix}message_fields
-				WHERE id_field IN ({array_int:fields})',
+                DELETE FROM {db_prefix}message_fields
+                WHERE id_field IN ({array_int:fields})',
                 array(
                     'fields' => $_POST['remove'],
                 )
@@ -62,9 +62,9 @@ class Admin extends \Suki\Ohara
                 $bbc = !empty($_POST['bbc'][$field['id_field']]) ? 'yes' : 'no';
                 if ($bbc != $field['bbc']) {
                     Database::query('', '
-						UPDATE {db_prefix}message_fields
-						SET bbc = {string:bbc}
-						WHERE id_field = {int:field}',
+                        UPDATE {db_prefix}message_fields
+                        SET bbc = {string:bbc}
+                        WHERE id_field = {int:field}',
                         array(
                             'bbc' => $bbc,
                             'field' => $field['id_field'],
@@ -75,9 +75,9 @@ class Admin extends \Suki\Ohara
                 $active = !empty($_POST['active'][$field['id_field']]) ? 'yes' : 'no';
                 if ($active != $field['active']) {
                     Database::query('', '
-						UPDATE {db_prefix}message_fields
-						SET active = {string:active}
-						WHERE id_field = {int:field}',
+                        UPDATE {db_prefix}message_fields
+                        SET active = {string:active}
+                        WHERE id_field = {int:field}',
                         array(
                             'active' => $active,
                             'field' => $field['id_field'],
@@ -88,9 +88,9 @@ class Admin extends \Suki\Ohara
                 $can_search = !empty($_POST['can_search'][$field['id_field']]) ? 'yes' : 'no';
                 if ($can_search != $field['can_search']) {
                     Database::query('', '
-						UPDATE {db_prefix}message_fields
-						SET can_search = {string:can_search}
-						WHERE id_field = {int:field}',
+                        UPDATE {db_prefix}message_fields
+                        SET can_search = {string:can_search}
+                        WHERE id_field = {int:field}',
                         array(
                             'can_search' => $can_search,
                             'field' => $field['id_field'],
@@ -265,10 +265,10 @@ class Admin extends \Suki\Ohara
         loadTemplate('PostFields');
 
         $request = Database::query('', '
-			SELECT b.id_board, b.name AS board_name, c.name AS cat_name
-			FROM {db_prefix}boards AS b
-				LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
-			WHERE redirect = {string:empty_string}',
+            SELECT b.id_board, b.name AS board_name, c.name AS cat_name
+            FROM {db_prefix}boards AS b
+                LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
+            WHERE redirect = {string:empty_string}',
             array(
                 'empty_string' => '',
             )
@@ -283,9 +283,9 @@ class Admin extends \Suki\Ohara
 
         if ($context['fid']) {
             $request = Database::query('', '
-				SELECT *
-				FROM {db_prefix}message_fields
-				WHERE id_field = {int:current_field}',
+                SELECT *
+                FROM {db_prefix}message_fields
+                WHERE id_field = {int:current_field}',
                 array(
                     'current_field' => $context['fid'],
                 )
@@ -435,11 +435,11 @@ class Admin extends \Suki\Ohara
 
             if ($context['fid']) {
                 Database::query('', '
-					UPDATE {db_prefix}message_fields
-					SET
-						' . implode(',
-						', $up_col) . '
-					WHERE id_field = {int:current_field}',
+                    UPDATE {db_prefix}message_fields
+                    SET
+                        ' . implode(',
+                        ', $up_col) . '
+                    WHERE id_field = {int:current_field}',
                     $up_data
                 );
             } else {
@@ -451,30 +451,22 @@ class Admin extends \Suki\Ohara
                 );
             }
 
-            /* // As there's currently no option to priorize certain fields over others, let's order them alphabetically.
-            Database::query('', '
-                ALTER TABLE {db_prefix}message_fields
-                ORDER BY name',
-                array(
-                    'db_error_skip' => true,
-                )
-            ); */
             redirectexit('action=admin;area=postfields');
         } elseif (isset($_POST['delete']) && $context['field']['colname']) {
             checkSession();
 
             // Delete the user data first.
             Database::query('', '
-				DELETE FROM {db_prefix}message_data
-				WHERE id_field = {int:current_field}',
+                DELETE FROM {db_prefix}message_data
+                WHERE id_field = {int:current_field}',
                 array(
                     'current_field' => $context['fid'],
                 )
             );
             // Finally - the field itself is gone!
             Database::query('', '
-				DELETE FROM {db_prefix}message_fields
-				WHERE id_field = {int:current_field}',
+                DELETE FROM {db_prefix}message_fields
+                WHERE id_field = {int:current_field}',
                 array(
                     'current_field' => $context['fid'],
                 )

@@ -63,10 +63,10 @@ class Integration
 
         if (isset($_REQUEST['msg'])) {
             $request = $smcFunc['db_query']('', '
-				SELECT *
-					FROM {db_prefix}message_field_data
-					WHERE id_msg = {int:msg}
-						AND id_field IN ({array_int:field_list})',
+                SELECT *
+                    FROM {db_prefix}message_field_data
+                    WHERE id_msg = {int:msg}
+                        AND id_field IN ({array_int:field_list})',
                 array(
                     'msg' => (int)$_REQUEST['msg'],
                     'field_list' => array_keys($fields),
@@ -115,10 +115,10 @@ class Integration
 
         if (isset($_REQUEST['msg'])) {
             $request = $smcFunc['db_query']('', '
-				SELECT *
-				FROM {db_prefix}message_field_data
-				WHERE id_msg = {int:msg}
-					AND id_field IN ({array_int:field_list})',
+                SELECT *
+                FROM {db_prefix}message_field_data
+                WHERE id_msg = {int:msg}
+                    AND id_field IN ({array_int:field_list})',
                 array(
                     'msg' => (int)$_REQUEST['msg'],
                     'field_list' => array_keys($field_list),
@@ -133,9 +133,9 @@ class Integration
 
         if (isset($topic)) {
             $request = $smcFunc['db_query']('', '
-				SELECT id_first_msg
-				FROM {db_prefix}topics
-				WHERE id_topic = {int:current_topic}',
+                SELECT id_first_msg
+                FROM {db_prefix}topics
+                WHERE id_topic = {int:current_topic}',
                 array(
                     'current_topic' => $topic,
                 )
@@ -213,9 +213,9 @@ class Integration
 
         if (isset($topic)) {
             $request = $smcFunc['db_query']('', '
-				SELECT id_first_msg
-				FROM {db_prefix}topics
-				WHERE id_topic = {int:current_topic}',
+                SELECT id_first_msg
+                FROM {db_prefix}topics
+                WHERE id_topic = {int:current_topic}',
                 array(
                     'current_topic' => $topic,
                 )
@@ -252,8 +252,8 @@ class Integration
 
         if (!empty($messages)) {
             $smcFunc['db_query']('', '
-				DELETE FROM {db_prefix}message_field_data
-				WHERE id_msg IN ({array_int:message_list})',
+                DELETE FROM {db_prefix}message_field_data
+                WHERE id_msg IN ({array_int:message_list})',
                 array(
                     'message_list' => $messages,
                 )
@@ -267,9 +267,9 @@ class Integration
 
         $messages = array();
         $request = $smcFunc['db_query']('', '
-			SELECT id_msg
-			FROM {db_prefix}messages
-			WHERE id_topic IN ({array_int:topics})',
+            SELECT id_msg
+            FROM {db_prefix}messages
+            WHERE id_topic IN ({array_int:topics})',
             array(
                 'topics' => $topics,
             )
@@ -295,9 +295,9 @@ class Integration
 
         $messages = array();
         $request = $smcFunc['db_query']('', '
-			SELECT id_first_msg
-			FROM {db_prefix}topics
-			WHERE id_topic IN ({array_int:topics})',
+            SELECT id_first_msg
+            FROM {db_prefix}topics
+            WHERE id_topic IN ({array_int:topics})',
             array(
                 'topics' => $topic_ids,
             )
@@ -325,10 +325,10 @@ class Integration
         }
 
         $request = $smcFunc['db_query']('', '
-			SELECT *
-			FROM {db_prefix}message_field_data
-			WHERE id_msg IN ({array_int:message_list})
-				AND id_field IN ({array_int:field_list})',
+            SELECT *
+            FROM {db_prefix}message_field_data
+            WHERE id_msg IN ({array_int:message_list})
+                AND id_field IN ({array_int:field_list})',
             array(
                 'message_list' => $messages,
                 'field_list' => array_keys($field_list),
@@ -356,8 +356,8 @@ class Integration
 
         if (!empty($context['fields'][$output['id']])) {
             $body = '
-							<br />
-							<dl class="settings">';
+                            <br />
+                            <dl class="settings">';
 
             foreach ($field_order as $fo) {
                 $field = $context['fields'][$output['id']][$fo];
@@ -379,24 +379,24 @@ class Integration
 
                 if ($field['id_field'] == 5 || $field['id_field'] == 6 || $field['id_field'] == 10) {
                     $body .= '
-							</dl>
-							<hr />
-							<dl class="settings" style="margin-top: 10px;">';
+                            </dl>
+                            <hr />
+                            <dl class="settings" style="margin-top: 10px;">';
                 }
 
                 $body .= '
-								<dt>
-									<strong>' . $field['name'] . ': </strong><br />
-								</dt>
-								<dd>
-									' . $field['output_html'] . '
-								</dd>';
+                                <dt>
+                                    <strong>' . $field['name'] . ': </strong><br />
+                                </dt>
+                                <dd>
+                                    ' . $field['output_html'] . '
+                                </dd>';
             }
 
             $output['body'] = $body . '
-							</dl>
-							<hr />
-							<br />' . $output['body'];
+                            </dl>
+                            <hr />
+                            <br />' . $output['body'];
         }
     }
 }
