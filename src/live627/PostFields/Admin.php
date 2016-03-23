@@ -260,7 +260,7 @@ class Admin extends \Suki\Ohara
 		$context['default_list'] = 'pf_fields';
 	}
 
-	function Edit()
+	public function Edit()
 	{
 		global $context;
 
@@ -494,7 +494,7 @@ class Admin extends \Suki\Ohara
 		}
 	}
 
-	function process($start, $length, $sort, $list, $listId)
+	public function process($start, $length, $sort, $list, $listId)
 	{
 		global $context;
 

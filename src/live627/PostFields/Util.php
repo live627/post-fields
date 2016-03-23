@@ -25,7 +25,7 @@ class Util extends \Suki\Ohara
 		$this->setRegistry();
 	}
 
-	function getFields()
+	public function getFields()
 	{
 		global $smcFunc;
 
@@ -40,7 +40,7 @@ class Util extends \Suki\Ohara
 		return $this->fields;
 	}
 
-	function getFieldsSearchable()
+	public function getFieldsSearchable()
 	{
 		$list = array();
 		foreach ($this->fields as $field) {
@@ -51,7 +51,7 @@ class Util extends \Suki\Ohara
 		return $list;
 	}
 
-	function filterFields($board, $is_message_index = false)
+	public function filterFields($board, $is_message_index = false)
 	{
 		global $context, $user_info;
 
@@ -72,7 +72,7 @@ class Util extends \Suki\Ohara
 		return $list;
 	}
 
-	function renderField($field, $value, $exists)
+	public function renderField($field, $value, $exists)
 	{
 		global $scripturl, $settings, $sourcedir;
 
@@ -123,7 +123,7 @@ class Util extends \Suki\Ohara
 	 * @return array all the membergroups filtered according to the parameters; empty array if something went wrong.
 	 * @since 1.0
 	 */
-	function list_groups(array $checked, array $disallowed = [], $inherited = false, $permission = null, $board_id = null)
+	public function list_groups(array $checked, array $disallowed = [], $inherited = false, $permission = null, $board_id = null)
 	{
 		global $context, $modSettings, $smcFunc, $sourcedir, $txt;
 

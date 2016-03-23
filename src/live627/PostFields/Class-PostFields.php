@@ -35,7 +35,7 @@ interface postFields
 	 * @return void
 	 */
 	public function setHtml();
-	function validate();
+	public function validate();
 }
 
 abstract class postFieldsBase implements postFields
@@ -61,7 +61,7 @@ abstract class postFieldsBase implements postFields
 	 * @access public
 	 * @return mixed The error string or false for no error.
 	 */
-	function getError()
+	public function getError()
 	{
 		return $this->err;
 	}
@@ -72,7 +72,7 @@ abstract class postFieldsBase implements postFields
 	 * @access public
 	 * @return string
 	 */
-	function getValue()
+	public function getValue()
 	{
 		return $this->value;
 	}
@@ -102,18 +102,18 @@ abstract class postFieldsBase implements postFields
 
 class postFields_check extends postFieldsBase
 {
-	function setHtml()
+	public function setHtml()
 	{
 		global $txt;
 		$true = (!$this->exists && $this->field['default_value']) || $this->value;
 		$this->input_html = '<input type="checkbox" name="postfield[' . $this->field['id_field'] . ']"' . ($true ? ' checked' : '') . '>';
 		$this->output_html = $true ? $txt['yes'] : $txt['no'];
 	}
-	function validate()
+	public function validate()
 	{
 		// Nothing needed here, really. It's just a get out of jail free card. "This card may be kept until needed, or sold."
 	}
-	function getValue()
+	public function getValue()
 	{
 		return $this->exists ? 1 : 0;
 	}
@@ -121,7 +121,7 @@ class postFields_check extends postFieldsBase
 
 class postFields_select extends postFieldsBase
 {
-	function setHtml()
+	public function setHtml()
 	{
 		$this->input_html = '<select name="postfield[' . $this->field['id_field'] . ']" style="width: 90%;">';
 		foreach (explode(',', $this->field['options']) as $v)
@@ -134,7 +134,7 @@ class postFields_select extends postFieldsBase
 
 		$this->input_html .= '</select>';
 	}
-	function validate()
+	public function validate()
 	{
 		global $txt;
 		$found = false;
@@ -145,7 +145,7 @@ class postFields_select extends postFieldsBase
 		if (!$found)
 			$this->err = array('pf_invalid_value', $this->field['name']);
 	}
-	function getValue()
+	public function getValue()
 	{
 		$value = $this->field['default_value'];
 		$opts = array_flip(explode(',', $this->field['options']));
@@ -158,7 +158,7 @@ class postFields_select extends postFieldsBase
 
 class postFields_radio extends postFieldsBase
 {
-	function setHtml()
+	public function setHtml()
 	{
 		$this->input_html = '<fieldset>';
 		foreach (explode(',', $this->field['options']) as $v)
@@ -170,12 +170,12 @@ class postFields_radio extends postFieldsBase
 		}
 		$this->input_html .= '</fieldset>';
 	}
-	function validate()
+	public function validate()
 	{
 		$helper = new postFields_select($this->field, $this->value, $this->exists);
 		$helper->validate();
 	}
-	function getValue()
+	public function getValue()
 	{
 		$helper = new postFields_select($this->field, $this->value, $this->exists);
 		$helper->getValue();
@@ -184,12 +184,12 @@ class postFields_radio extends postFieldsBase
 
 class postFields_text extends postFieldsBase
 {
-	function setHtml()
+	public function setHtml()
 	{
 		$this->output_html = $this->value;
 		$this->input_html = '<input type="text" name="postfield[' . $this->field['id_field'] . ']" ' . ($this->field['size'] != 0 ? 'maxsize="' . $this->field['size'] . '"' : '') . ' style="width: 90%;" size="' . ($this->field['size'] == 0 || $this->field['size'] >= 50 ? 50 : ($this->field['size'] > 30 ? 30 : ($this->field['size'] > 10 ? 20 : 10))) . '" value="' . $this->value . '">';
 	}
-	function validate()
+	public function validate()
 	{
 		if (!empty($this->field['length']))
 			$value = substr($this->value, 0, $this->field['length']);
@@ -207,13 +207,13 @@ class postFields_text extends postFieldsBase
 
 class postFields_textarea extends postFieldsBase
 {
-	function setHtml()
+	public function setHtml()
 	{
 		$this->output_html = $this->value;
 		@list ($rows, $cols) = @explode(',', $this->field['default_value']);
 		$this->input_html = '<textarea name="postfield[' . $this->field['id_field'] . ']" ' . (!empty($rows) ? 'rows="' . $rows . '"' : '') . ' ' . (!empty($cols) ? 'cols="' . $cols . '"' : '') . '>' . $this->value . '</textarea>';
 	}
-	function validate()
+	public function validate()
 	{
 		$helper = new postFields_text($this->field, $this->value, $this->exists);
 		$helper->validate();
@@ -222,8 +222,8 @@ class postFields_textarea extends postFieldsBase
 
 interface postFieldMask
 {
-	function __construct($value, $field);
-	function validate();
+	public function __construct($value, $field);
+	public function validate();
 }
 
 abstract class postFieldMaskBase implements postFieldMask
@@ -231,14 +231,14 @@ abstract class postFieldMaskBase implements postFieldMask
 	protected $value;
 	protected $field;
 	protected $err;
-	function __construct($value, $field)
+	public function __construct($value, $field)
 	{
 		$this->value = $value;
 		$this->field = $field;
 		$this->err = false;
 	}
 
-	function getError()
+	public function getError()
 	{
 		return $this->err;
 	}
@@ -246,7 +246,7 @@ abstract class postFieldMaskBase implements postFieldMask
 
 class postFieldMask_email extends postFieldMaskBase
 {
-	function validate()
+	public function validate()
 	{
 		global $txt;
 		if (!filter_var($this->value, FILTER_VALIDATE_EMAIL))
@@ -256,7 +256,7 @@ class postFieldMask_email extends postFieldMaskBase
 
 class postFieldMask_regex extends postFieldMaskBase
 {
-	function validate()
+	public function validate()
 	{
 		global $txt;
 		if (!preg_match($this->field['regex'], $this->value))
@@ -269,7 +269,7 @@ class postFieldMask_regex extends postFieldMaskBase
 
 class postFieldMask_number extends postFieldMaskBase
 {
-	function validate()
+	public function validate()
 	{
 		global $txt;
 		if (!preg_match('/^\s*([0-9]+)\s*$/', $this->value))
@@ -279,7 +279,7 @@ class postFieldMask_number extends postFieldMaskBase
 
 class postFieldMask_float extends postFieldMaskBase
 {
-	function validate()
+	public function validate()
 	{
 		global $txt;
 		if (!preg_match('/^\s*([0-9]+(\.[0-9]+)?)\s*$/', $this->value))
@@ -289,7 +289,7 @@ class postFieldMask_float extends postFieldMaskBase
 
 class postFieldMask_nohtml extends postFieldMaskBase
 {
-	function validate()
+	public function validate()
 	{
 		global $txt;
 		if (strip_tags($this->value) != $this->value)
