@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	backupGlobals="false"
-	colors="true"
-	verbose="true"
-	bootstrap="vendor/autoload.php">
-	<testsuites>
-		<testsuite name="Post Fields Test Suite">
-			<directory>./tests/</directory>
-		</testsuite>
-	</testsuites>
+         backupGlobals="false"
+         colors="true"
+         verbose="true"
+         bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="Post Fields Test Suite">
+            <directory>./tests/</directory>
+        </testsuite>
+    </testsuites>
     <logging>
         <log type="tap" target="build/report.tap"/>
         <log type="junit" target="build/report.junit.xml"/>

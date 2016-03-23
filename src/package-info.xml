@@ -1,29 +1,29 @@
 <?xml version="1.0"?>
 <!DOCTYPE package-info SYSTEM "http://www.simplemachines.org/xml/package-info">
 <package-info xmlns="http://www.simplemachines.org/xml/package-info" xmlns:smf="http://www.simplemachines.org/">
-	<id>live627:post_fields</id>
-	<name>Post Fields</name>
-	<type>modification</type>
-	<version>2.0</version>
+    <id>live627:post_fields</id>
+    <name>Post Fields</name>
+    <type>modification</type>
+    <version>2.0</version>
 
-	<install for="2.0 - 2.0.99">
+    <install for="2.0 - 2.0.99">
         <code>check.php</code>
         <code>add_remove_hooks.php</code>
-		<database>install.php</database>
-		<modification>install.xml</modification>
-		<require-dir name="PostFields" destination="$sourcedir" />
-		<require-file name="PostFields.template.php" destination="$themedir" />
-		<require-file name="postfieldsadmin.js" destination="$themedir/scripts" />
-		<require-file name="PostFields.english.php" destination="$languagedir" />
-	</install>
+        <database>install.php</database>
+        <modification>install.xml</modification>
+        <require-dir name="PostFields" destination="$sourcedir"/>
+        <require-file name="PostFields.template.php" destination="$themedir"/>
+        <require-file name="postfieldsadmin.js" destination="$themedir/scripts"/>
+        <require-file name="PostFields.english.php" destination="$languagedir"/>
+    </install>
 
-	<uninstall for="2.0 - 2.0.99">
+    <uninstall for="2.0 - 2.0.99">
         <code>add_remove_hooks.php</code>
-		<modification reverse="true">install.xml</modification>
-		<remove-dir name="$sourcedir/PostFields" />
-		<remove-file name="$themedir/scripts/postfieldsadmin.js" />
-		<remove-file name="$themedir/PostFields.template.php" />
-		<remove-file name="$languagedir/PostFields.english.php" />
-	</uninstall>
+        <modification reverse="true">install.xml</modification>
+        <remove-dir name="$sourcedir/PostFields"/>
+        <remove-file name="$themedir/scripts/postfieldsadmin.js"/>
+        <remove-file name="$themedir/PostFields.template.php"/>
+        <remove-file name="$languagedir/PostFields.english.php"/>
+    </uninstall>
 
 </package-info>

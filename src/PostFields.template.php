@@ -2,9 +2,9 @@
 
 function template_edit()
 {
-	global $context, $txt, $settings, $scripturl;
+    global $context, $txt, $settings, $scripturl;
 
-	echo '
+    echo '
 	<div id="admincenter">
 		<form action="', $scripturl, '?action=admin;area=postfields;sa=edit" method="post" accept-charset="UTF-8">
 			<div class="cat_bar">
@@ -16,7 +16,7 @@ function template_edit()
 			<span class="topslice"><span></span></span>
 			<div class="padding">';
 
-	echo '
+    echo '
 				<fieldset>
 					<legend>', $txt['PostFields_general'], '</legend>
 
@@ -49,16 +49,16 @@ function template_edit()
 								<label>
 									<input type="checkbox" class="input_check" onclick="invertAll(this, this.form, \'boards\');"', $context['all_boards_checked'] ? ' checked="checked"' : '', ' /> <em>', $txt['check_all'], '</em></label><br />';
 
-	foreach ($context['boards'] as $id_board => $board_link) {
-			echo '
+    foreach ($context['boards'] as $id_board => $board_link) {
+        echo '
 								<label>
 									<input type="checkbox" name="boards[', $id_board, ']"', in_array($id_board, $context['field']['boards']) ? ' checked' : '', '>
 									', $board_link, '
 								</label>
 								<br />';
-	}
+    }
 
-	echo '
+    echo '
 							</div>
 						</dd>
 						<dt>
@@ -69,8 +69,8 @@ function template_edit()
 								<label>
 									<input type="checkbox" class="input_check" onclick="invertAll(this, this.form, \'groups\');"', $context['all_groups_checked'] ? ' checked="checked"' : '', ' /> <em>', $txt['check_all'], '</em></label><br />';
 
-	foreach ($context['groups'] as $group) {
-			echo '
+    foreach ($context['groups'] as $group) {
+        echo '
 								<label>
 									<input type="checkbox" name="groups[', $group['id'], ']"', $group['checked'] ? ' checked' : '', '>
 									<span', $group['is_post_group'] ? ' class="post_group" title="' . $txt['mboards_groups_post_group'] . '"' : ($group['id'] == 0 ? ' class="regular_members" title="' . $txt['mboards_groups_regular_members'] . '"' : ''), $group['color'] ? ' style="color: ' . $group['color'] . '"' : '', '>
@@ -78,9 +78,9 @@ function template_edit()
 									</span>
 								</label>
 								<br />';
-	}
+    }
 
-	echo '
+    echo '
 							</div>
 						</dd>
 					</dl>
@@ -136,12 +136,12 @@ function template_edit()
 						<dd id="options_dd">
 							<div>';
 
-	foreach ($context['field']['options'] as $k => $option) {
-			echo '
+    foreach ($context['field']['options'] as $k => $option) {
+        echo '
 								', $k == 0 ? '' : '<br>', '<input type="radio" name="default_select" value="', $k, '"', $context['field']['default_select'] == $option ? ' checked' : '', '><input type="text" name="select_option[', $k, ']" value="', $option, '">';
-	}
+    }
 
-	echo '
+    echo '
 								<span id="addopt"></span>
 								[<a href="" onclick="addOption(); return false;">', $txt['more'], '</a>]
 							</div>
@@ -199,23 +199,23 @@ function template_edit()
 				<div class="righttext">
 					<input type="submit" name="save" value="', $txt['save'], '" class="submit">';
 
-	if ($context['fid']) {
-			echo '
+    if ($context['fid']) {
+        echo '
 					<input type="submit" name="delete" value="', $txt['delete'], '" onclick="return confirm(', JavaScriptEscape($txt['PostFields_delete_sure']), ');" class="delete">';
-	}
+    }
 
-	echo '
+    echo '
 				</div></div>
 			<span class="botslice"><span></span></span>
 			</div>
 			<input type="hidden" name="', $context['session_var'], '" value="', $context['session_id'], '">';
 
-	if ($context['fid']) {
-			echo '
+    if ($context['fid']) {
+        echo '
 			<input type="hidden" name="fid" value="', $context['fid'], '">';
-	}
+    }
 
-	echo '
+    echo '
 		</form>
 	</div>
 	<script type="text/javascript">
@@ -228,19 +228,17 @@ function template_edit()
 
 function template_input_post_fields()
 {
-	global $context, $scripturl;
+    global $context, $scripturl;
 
-	if (!empty($context['fields']))
-	{
+    if (!empty($context['fields'])) {
 
-		foreach ($context['fields'] as $field)
-		{
-			$call = strtr($field['name'], ' ', '_');
+        foreach ($context['fields'] as $field) {
+            $call = strtr($field['name'], ' ', '_');
 
-			if (is_callable('template_pf_' . $call)) {
-							call_user_func_array('template_pf_' . $call, array($field));
-			} else {
-							echo '
+            if (is_callable('template_pf_' . $call)) {
+                call_user_func_array('template_pf_' . $call, array($field));
+            } else {
+                echo '
 							<dt>
 								<strong>', $field['name'], ': </strong><br />
 								<span class="smalltext">', $field['description'], '</span>
@@ -248,22 +246,22 @@ function template_input_post_fields()
 							<dd>
 								', $field['input_html'], '
 							</dd>';
-			}
-		}
-	}
+            }
+        }
+    }
 }
 
 function template_search_post_fields()
 {
-	global $context, $scripturl;
+    global $context, $scripturl;
 
-	if (!empty($context['fields'])) {
-			foreach (array_reverse($context['fields']) as $field) {
-						if (is_callable('template_search_pf_' . $field['name']))
-				call_user_func_array('template_search_pf_' . $field['name'], array($field));
-			}
-	} else {
-							echo '
+    if (!empty($context['fields'])) {
+        foreach (array_reverse($context['fields']) as $field) {
+            if (is_callable('template_search_pf_' . $field['name']))
+                call_user_func_array('template_search_pf_' . $field['name'], array($field));
+        }
+    } else {
+        echo '
 						<dt>
 							', $field['name'], ': <br />
 							<span class="smalltext">', $field['description'], '</span>
@@ -271,18 +269,18 @@ function template_search_post_fields()
 						<dd>
 							', $field['input_html'], '
 						</dd>';
-			}
-			}
+    }
+}
 
 function template_search_post_fields_simple()
 {
-	echo '
+    echo '
 		<fieldset id="advanced_search">
 				<dl id="search_options" style="padding-top: 0;">';
 
-	template_search_post_fields();
+    template_search_post_fields();
 
-	echo '
+    echo '
 				</dl>
 		</fieldset>';
 }

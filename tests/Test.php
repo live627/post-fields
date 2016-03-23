@@ -5,15 +5,18 @@ define('SMF', 1);
 $settings['default_images_url'] = '';
 $settings['images_url'] = '';
 $scripturl = '';
-$sourcedir = __DIR__  . '/../src/live627/PostFields';
+$sourcedir = __DIR__ . '/../src/live627/PostFields';
 
-function call_integration_hook($hook, $parameters = array()) {
+function call_integration_hook($hook, $parameters = array())
+{
     // You're fired! You're all fired!
 }
 
-function fatal_error($msg, $log) {
+function fatal_error($msg, $log)
+{
     die($msg);
 }
+
 class MockUtil extends live627\PostFields\Util
 {
     public function setFields(array $columns, array $data)
@@ -76,8 +79,7 @@ class Test extends PHPUnit_Framework_TestCase
         $this->loader->setFields($in_col, $in_data);
         $i = 0;
         require_once($sourcedir . '/Class-PostFields.php');
-        foreach ($this->loader->fields as &$field)
-        {
+        foreach ($this->loader->fields as &$field) {
             $field['id_field'] = ++$i;
             $field['description'] = '';
             $field['bbc'] = 'no';
@@ -90,17 +92,17 @@ class Test extends PHPUnit_Framework_TestCase
             if ($field['type'] == 'text') {
                 switch ($field['mask']) {
                     case 'regex':
-                    $value = '/^def//';
-                    break;
+                        $value = '/^def//';
+                        break;
                     case 'email':
-                    $value = 'live627@gmail.com';
-                    break;
+                        $value = 'live627@gmail.com';
+                        break;
                     case 'float':
-                    $value = 6.8;
-                    break;
+                        $value = 6.8;
+                        break;
                     case 'number':
-                    $value = 6;
-                    break;
+                        $value = 6;
+                        break;
                 }
             }
             $field['value'] = $value;
@@ -112,8 +114,7 @@ class Test extends PHPUnit_Framework_TestCase
 
     public function testExistingFields()
     {
-        foreach ($this->loader->getFields() as $field)
-        {
+        foreach ($this->loader->getFields() as $field) {
             $actual = $this->loader->renderField($field, '', false);
             $this->assertSame($field['name'], $actual['name']);
         }
@@ -147,8 +148,7 @@ class Test extends PHPUnit_Framework_TestCase
 
     public function testFieldErrors()
     {
-        foreach ($this->loader->getFields() as $field)
-        {
+        foreach ($this->loader->getFields() as $field) {
             $field['class']->validate();
             $this->assertFalse($field['class']->getError());
         }

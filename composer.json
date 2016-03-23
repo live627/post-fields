@@ -1,24 +1,27 @@
 {
-	"name": "Post Fields",
-	"type": "smf-module",
-	"description": "Custom fields for posts",
-	"keywords": ["SMF","modifications"],
-	"homepage": "https://github.com/live627/post-fields",
-	"license": "MIT",
-	"authors": [
-		{
-			"name": "John Rayes",
-			"email": "live627@gmail.com",
-			"role": "Developer"
-		}
-	],
-	"require": {
-		"php": ">=5.5.0",
-		"suki/ohara": "~1.0"
-	},
-	"autoload": {
-		"psr-4": {
-			"live627\\": "src/live627/"
-		}
-	}
+  "name": "Post Fields",
+  "type": "smf-module",
+  "description": "Custom fields for posts",
+  "keywords": [
+    "SMF",
+    "modifications"
+  ],
+  "homepage": "https://github.com/live627/post-fields",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "John Rayes",
+      "email": "live627@gmail.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.5.0",
+    "suki/ohara": "~1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "live627\\": "src/live627/"
+    }
+  }
 }
