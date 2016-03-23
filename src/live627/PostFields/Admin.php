@@ -121,7 +121,7 @@ class Admin extends \Suki\Ohara
                 ),
             ),
             'get_count' => array(
-                'function' => function () {
+                'function' => function() {
                     return count($this->util->getFields());
                 }
             ),
@@ -132,7 +132,7 @@ class Admin extends \Suki\Ohara
                         'style' => 'text-align: left;',
                     ),
                     'data' => array(
-                        'function' => function ($rowData) {
+                        'function' => function($rowData) {
                             return sprintf('<a href="%1$s?action=admin;area=postfields;sa=edit;fid=%2$d">%3$s</a><div class="smalltext">%4$s</div>', $this->scriptUrl, $rowData['id_field'], $rowData['name'], $rowData['description']);
                         },
                         'style' => 'width: 40%;',
@@ -147,7 +147,7 @@ class Admin extends \Suki\Ohara
                         'value' => $this->text('fieldtype'),
                     ),
                     'data' => array(
-                        'function' => function ($rowData) {
+                        'function' => function($rowData) {
                             $textKey = sprintf('type_%1$s', $rowData['type']);
                             return $this->text($textKey);
                         },
@@ -163,7 +163,7 @@ class Admin extends \Suki\Ohara
                         'value' => $this->text('bbc'),
                     ),
                     'data' => array(
-                        'function' => function ($rowData) {
+                        'function' => function($rowData) {
                             $isChecked = $rowData['bbc'] == 'no' ? '' : ' checked';
                             return sprintf('<span id="bbc_%1$s" class="color_%4$s">%3$s</span>&nbsp;<input type="checkbox" name="bbc[%1$s]" id="bbc_%1$s" value="%1$s"%2$s>', $rowData['id_field'], $isChecked, $this->text($rowData['bbc']), $rowData['bbc']);
                         },
@@ -179,7 +179,7 @@ class Admin extends \Suki\Ohara
                         'value' => $this->text('active'),
                     ),
                     'data' => array(
-                        'function' => function ($rowData) {
+                        'function' => function($rowData) {
                             $isChecked = $rowData['active'] == 'no' ? '' : ' checked';
                             return sprintf('<span id="active_%1$s" class="color_%4$s">%3$s</span>&nbsp;<input type="checkbox" name="active[%1$s]" id="active_%1$s" value="%1$s"%2$s>', $rowData['id_field'], $isChecked, $this->text($rowData['active']), $rowData['active']);
                         },
@@ -195,7 +195,7 @@ class Admin extends \Suki\Ohara
                         'value' => $this->text('can_search'),
                     ),
                     'data' => array(
-                        'function' => function ($rowData) {
+                        'function' => function($rowData) {
                             $isChecked = $rowData['can_search'] == 'no' ? '' : ' checked';
                             return sprintf('<span id="can_search_%1$s" class="color_%4$s">%3$s</span>&nbsp;<input type="checkbox" name="can_search[%1$s]" id="can_search_%1$s" value="%1$s"%2$s>', $rowData['id_field'], $isChecked, $this->text($rowData['can_search']), $rowData['can_search']);
                         },
@@ -225,7 +225,7 @@ class Admin extends \Suki\Ohara
                         'value' => $this->text('remove'),
                     ),
                     'data' => array(
-                        'function' => function ($rowData) {
+                        'function' => function($rowData) {
                             return sprintf('<span id="remove_%1$s" class="color_no">%2$s</span>&nbsp;<input type="checkbox" name="remove[%1$s]" id="remove_%1$s" value="%1$s">', $rowData['id_field'], $this->text('no'));
                         },
                         'style' => 'width: 10%; text-align: center;',
@@ -259,7 +259,7 @@ class Admin extends \Suki\Ohara
     {
         global $context;
 
-        $context['fid'] = isset($_REQUEST['fid']) ? (int)$_REQUEST['fid'] : 0;
+        $context['fid'] = isset($_REQUEST['fid']) ? (int) $_REQUEST['fid'] : 0;
         $context['page_title'] = $this->text('title') . ' - ' . ($context['fid'] ? $this->text('edit') : $this->text('add'));
         $context['html_headers'] .= '<script type="text/javascript" src="' . $this->settings['default_theme_url'] . '/scripts/postfieldsadmin.js"></script>';
         loadTemplate('PostFields');
@@ -346,7 +346,7 @@ class Admin extends \Suki\Ohara
         }
 
         $context['groups'] = $this->util->list_groups($context['field']['groups']);
-        $context['all_groups_checked'] = empty(array_diff_key($context['groups'], array_filter($context['groups'], function ($group) {
+        $context['all_groups_checked'] = empty(array_diff_key($context['groups'], array_filter($context['groups'], function($group) {
             return $group['checked'];
         })));
         $context['all_boards_checked'] = empty(array_diff(array_keys($context['boards']), $context['field']['boards']));
@@ -367,7 +367,7 @@ class Admin extends \Suki\Ohara
 
             $mask = isset($_POST['mask']) ? $_POST['mask'] : '';
             $regex = isset($_POST['regex']) ? $_POST['regex'] : '';
-            $length = isset($_POST['lengt']) ? (int)$_POST['lengt'] : 255;
+            $length = isset($_POST['lengt']) ? (int) $_POST['lengt'] : 255;
             $groups = !empty($_POST['groups']) ? implode(',', array_keys($_POST['groups'])) : '';
             $boards = !empty($_POST['boards']) ? implode(',', array_keys($_POST['boards'])) : '';
 
@@ -393,7 +393,7 @@ class Admin extends \Suki\Ohara
             }
 
             if ($_POST['type'] == 'textarea') {
-                $default = (int)$_POST['rows'] . ',' . (int)$_POST['cols'];
+                $default = (int) $_POST['rows'] . ',' . (int) $_POST['cols'];
             }
 
             $up_col = array(

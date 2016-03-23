@@ -75,6 +75,9 @@ class Util extends \Suki\Ohara
         return $list;
     }
 
+    /**
+     * @param boolean $exists
+     */
     public function renderField($field, $value, $exists)
     {
         global $scripturl, $settings, $sourcedir;
@@ -181,7 +184,7 @@ class Util extends \Suki\Ohara
         );
         while ($row = $smcFunc['db_fetch_assoc']($request)) {
             if (!in_array($row['id_group'], $disallowed)) {
-                $groups[(int)$row['id_group']] = array(
+                $groups[(int) $row['id_group']] = array(
                     'id' => $row['id_group'],
                     'name' => trim($row['group_name']),
                     'checked' => in_array($row['id_group'], $checked) || in_array(-3, $checked),
