@@ -91,7 +91,7 @@ class Util extends \Suki\Ohara
 			$param->output_html = strtr($param->output_html, array("\n" => '<br>'));
 
 		// Enclosing the user input within some other text?
-		if (!empty($field['enclose']) && !empty($output_html))
+		if (!empty($field['enclose']) && !empty($param->output_html))
 		{
 			$replacements = array(
 				'{SCRIPTURL}' => $scripturl,
