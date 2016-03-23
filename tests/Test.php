@@ -7,11 +7,18 @@ $settings['images_url'] = '';
 $scripturl = '';
 $sourcedir = __DIR__ . '/../src/live627/PostFields';
 
+/**
+ * @param string $hook
+ */
 function call_integration_hook($hook, $parameters = array())
 {
     // You're fired! You're all fired!
 }
 
+/**
+ * @param string $msg
+ * @param boolean $log
+ */
 function fatal_error($msg, $log)
 {
     die($msg);
