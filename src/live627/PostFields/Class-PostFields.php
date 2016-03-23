@@ -140,18 +140,21 @@ class postFields_select extends postFieldsBase
 		global $txt;
 		$found = false;
 		$opts = array_flip(explode(',', $this->field['options']));
-		if (isset($this->value, $opts[$this->value]))
-			$found = true;
+		if (isset($this->value, $opts[$this->value])) {
+					$found = true;
+		}
 
-		if (!$found)
-			$this->err = array('pf_invalid_value', $this->field['name']);
+		if (!$found) {
+					$this->err = array('pf_invalid_value', $this->field['name']);
+		}
 	}
 	public function getValue()
 	{
 		$value = $this->field['default_value'];
 		$opts = array_flip(explode(',', $this->field['options']));
-		if (isset($this->value, $opts[$this->value]))
-			$value = $this->value;
+		if (isset($this->value, $opts[$this->value])) {
+					$value = $this->value;
+		}
 
 		return $value;
 	}
@@ -227,6 +230,9 @@ class postFields_textarea extends postFieldsBase
 
 interface postFieldMask
 {
+	/**
+	 * @return void
+	 */
 	public function __construct($value, $field);
 	public function validate();
 }
@@ -266,8 +272,9 @@ class postFieldMask_regex extends postFieldMaskBase
 	{
 		global $txt;
 		if (!preg_match($this->field['regex'], $this->value)) {
-					if (!empty($this->field['err']))
-				$this->err = $this->field['err'];
+					if (!empty($this->field['err'])) {
+									$this->err = $this->field['err'];
+					}
 		} else {
 							$this->err = array('pf_invalid_value', $this->field['name']);
 			}
