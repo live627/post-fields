@@ -224,7 +224,7 @@ class postFields_textarea extends postFieldsBase
     public function setHtml()
     {
         $this->output_html = $this->value;
-        @list ($rows, $cols) = @explode(',', $this->field['default_value']);
+        list ($rows, $cols) = explode(',', $this->field['default_value']);
         $this->input_html = '<textarea name="postfield[' . $this->field['id_field'] . ']" ' . (!empty($rows) ? 'rows="' . $rows . '"' : '') . ' ' . (!empty($cols) ? 'cols="' . $cols . '"' : '') . '>' . $this->value . '</textarea>';
     }
 

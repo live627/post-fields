@@ -293,7 +293,7 @@ class Admin extends \Suki\Ohara
             $context['field'] = array();
             while ($row = Database::fetch_assoc($request)) {
                 if ($row['type'] == 'textarea') {
-                    @list ($rows, $cols) = @explode(',', $row['default_value']);
+                    list ($rows, $cols) = explode(',', $row['default_value']);
                 } else {
                     $rows = 3;
                     $cols = 30;
