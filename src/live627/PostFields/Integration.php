@@ -23,7 +23,7 @@ class Integration
         $admin_areas['layout']['areas']['postfields'] = array(
             'label' => $ohara->text('title'),
             'icon' => 'settings.gif',
-            'function' => function () {
+            'function' => function() {
                 \live627\PostFields\Dispatcher::getInstance();
             },
             'subsections' => array(
@@ -68,7 +68,7 @@ class Integration
                     WHERE id_msg = {int:msg}
                         AND id_field IN ({array_int:field_list})',
                 array(
-                    'msg' => (int)$_REQUEST['msg'],
+                    'msg' => (int) $_REQUEST['msg'],
                     'field_list' => array_keys($fields),
                 )
             );
@@ -120,7 +120,7 @@ class Integration
                 WHERE id_msg = {int:msg}
                     AND id_field IN ({array_int:field_list})',
                 array(
-                    'msg' => (int)$_REQUEST['msg'],
+                    'msg' => (int) $_REQUEST['msg'],
                     'field_list' => array_keys($field_list),
                 )
             );
@@ -243,7 +243,7 @@ class Integration
 
     public static function remove_message($message, $decreasePostCount)
     {
-        self::remove_messages((array)$message, $decreasePostCount);
+        self::remove_messages((array) $message, $decreasePostCount);
     }
 
     public static function remove_messages($messages, $decreasePostCount)
