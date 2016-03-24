@@ -330,121 +330,110 @@ class Admin extends \Suki\Ohara
             if (trim($_POST['name']) == '') {
                 fatal_lang_error('post_option_need_name');
             }
-            $_POST['name'] = $smcFunc['htmlspecialchars']($_POST['name']);
-            $_POST['description'] = $smcFunc['htmlspecialchars']($_POST['description']);
-
-            $bbc = !empty($_POST['bbc']) ? 'yes' : 'no';
-            $active = !empty($_POST['active']) ? 'yes' : 'no';
-            $can_search = !empty($_POST['can_search']) ? 'yes' : 'no';
-
-            $mask = isset($_POST['mask']) ? $_POST['mask'] : '';
-            $regex = isset($_POST['regex']) ? $_POST['regex'] : '';
-            $length = isset($_POST['lengt']) ? (int) $_POST['lengt'] : 255;
-            $groups = !empty($_POST['groups']) ? implode(',', array_keys($_POST['groups'])) : '';
-            $boards = !empty($_POST['boards']) ? implode(',', array_keys($_POST['boards'])) : '';
-
-            $options = '';
-            $newOptions = array();
-            $default = isset($_POST['default_check']) && $_POST['type'] == 'check' ? 1 : '';
-            if (!empty($_POST['select_option']) && ($_POST['type'] == 'select' || $_POST['type'] == 'radio')) {
-                foreach ($_POST['select_option'] as $k => $v) {
-                    $v = $smcFunc['htmlspecialchars']($v);
-                    $v = strtr($v, array(',' => ''));
-
-                    if (trim($v) == '') {
-                        continue;
-                    }
-
-                    $newOptions[$k] = $v;
-
-                    if (isset($_POST['default_select']) && $_POST['default_select'] == $k) {
-                        $default = $v;
-                    }
-                }
-                $options = implode(',', $newOptions);
-            }
-
-            if ($_POST['type'] == 'textarea') {
-                $default = (int) $_POST['rows'] . ',' . (int) $_POST['cols'];
-            }
-
-            $up_col = array(
-                'name = {string:name}', ' description = {string:description}', ' enclose = {string:enclose}',
-                '`type` = {string:type}', ' size = {int:length}',
-                'options = {string:options}',
-                'active = {string:active}', ' default_value = {string:default_value}',
-                'can_search = {string:can_search}', ' bbc = {string:bbc}', ' mask = {string:mask}', ' regex = {string:regex}',
-                'groups = {string:groups}', ' boards = {string:boards}',
-            );
-            $up_data = array(
-                'length' => $length,
-                'active' => $active,
-                'can_search' => $can_search,
-                'bbc' => $bbc,
-                'current_field' => $context['fid'],
-                'name' => $_POST['name'],
-                'description' => $_POST['description'],
-                'enclose' => $_POST['enclose'],
-                'type' => $_POST['type'],
-                'options' => $options,
-                'default_value' => $default,
-                'mask' => $mask,
-                'regex' => $regex,
-                'groups' => $groups,
-                'boards' => $boards,
-            );
-            $in_col = array(
-                'name' => 'string', 'description' => 'string', 'enclose' => 'string',
-                'type' => 'string', 'size' => 'string', 'options' => 'string', 'active' => 'string', 'default_value' => 'string',
-                'can_search' => 'string', 'bbc' => 'string', 'mask' => 'string', 'regex' => 'string', 'groups' => 'string', 'boards' => 'string',
-            );
-            $in_data = array(
-                $_POST['name'], $_POST['description'], $_POST['enclose'],
-                $_POST['type'], $length, $options, $active, $default,
-                $can_search, $bbc, $mask, $regex, $groups, $boards,
-            );
-            call_integration_hook('integrate_save_post_field', array(&$up_col, &$up_data, &$in_col, &$in_data));
-
-            if ($context['fid']) {
-                Database::query('', '
-                    UPDATE {db_prefix}message_fields
-                    SET
-                        ' . implode(',
-                        ', $up_col) . '
-                    WHERE id_field = {int:current_field}',
-                    $up_data
-                );
-            } else {
-                Database::insert('',
-                    '{db_prefix}message_fields',
-                    $in_col,
-                    $in_data,
-                    array('id_field')
-                );
-            }
-
+            $this->insertField($context['fid']);
             redirectexit('action=admin;area=postfields');
         } elseif (isset($_POST['delete']) && $context['field']['colname']) {
             checkSession();
-
-            // Delete the user data first.
-            Database::query('', '
-                DELETE FROM {db_prefix}message_data
-                WHERE id_field = {int:current_field}',
-                array(
-                    'current_field' => $context['fid'],
-                )
-            );
-            // Finally - the field itself is gone!
-            Database::query('', '
-                DELETE FROM {db_prefix}message_fields
-                WHERE id_field = {int:current_field}',
-                array(
-                    'current_field' => $context['fid'],
-                )
-            );
-            call_integration_hook('integrate_delete_post_field');
+            $this->deleteFields($context['fid']);
             redirectexit('action=admin;area=postfields');
+        }
+    }
+
+    public function insertField($field)
+    {
+        global $smcFunc;
+
+        $_POST['name'] = $smcFunc['htmlspecialchars']($_POST['name']);
+        $_POST['description'] = $smcFunc['htmlspecialchars']($_POST['description']);
+
+        $bbc = !empty($_POST['bbc']) ? 'yes' : 'no';
+        $active = !empty($_POST['active']) ? 'yes' : 'no';
+        $can_search = !empty($_POST['can_search']) ? 'yes' : 'no';
+
+        $mask = isset($_POST['mask']) ? $_POST['mask'] : '';
+        $regex = isset($_POST['regex']) ? $_POST['regex'] : '';
+        $length = isset($_POST['lengt']) ? (int)$_POST['lengt'] : 255;
+        $groups = !empty($_POST['groups']) ? implode(',', array_keys($_POST['groups'])) : '';
+        $boards = !empty($_POST['boards']) ? implode(',', array_keys($_POST['boards'])) : '';
+
+        $options = '';
+        $newOptions = array();
+        $default = isset($_POST['default_check']) && $_POST['type'] == 'check' ? 1 : '';
+        if (!empty($_POST['select_option']) && ($_POST['type'] == 'select' || $_POST['type'] == 'radio')) {
+            foreach ($_POST['select_option'] as $k => $v) {
+                $v = $smcFunc['htmlspecialchars']($v);
+                $v = strtr($v, array(',' => ''));
+
+                if (trim($v) == '') {
+                    continue;
+                }
+
+                $newOptions[$k] = $v;
+
+                if (isset($_POST['default_select']) && $_POST['default_select'] == $k) {
+                    $default = $v;
+                }
+            }
+            $options = implode(',', $newOptions);
+        }
+
+        if ($_POST['type'] == 'textarea') {
+            $default = (int)$_POST['rows'] . ',' . (int)$_POST['cols'];
+        }
+
+        $up_col = array(
+            'name = {string:name}', ' description = {string:description}', ' enclose = {string:enclose}',
+            '`type` = {string:type}', ' size = {int:length}',
+            'options = {string:options}',
+            'active = {string:active}', ' default_value = {string:default_value}',
+            'can_search = {string:can_search}', ' bbc = {string:bbc}', ' mask = {string:mask}', ' regex = {string:regex}',
+            'groups = {string:groups}', ' boards = {string:boards}',
+        );
+        $up_data = array(
+            'length' => $length,
+            'active' => $active,
+            'can_search' => $can_search,
+            'bbc' => $bbc,
+            'current_field' => $field,
+            'name' => $_POST['name'],
+            'description' => $_POST['description'],
+            'enclose' => $_POST['enclose'],
+            'type' => $_POST['type'],
+            'options' => $options,
+            'default_value' => $default,
+            'mask' => $mask,
+            'regex' => $regex,
+            'groups' => $groups,
+            'boards' => $boards,
+        );
+        $in_col = array(
+            'name' => 'string', 'description' => 'string', 'enclose' => 'string',
+            'type' => 'string', 'size' => 'string', 'options' => 'string', 'active' => 'string', 'default_value' => 'string',
+            'can_search' => 'string', 'bbc' => 'string', 'mask' => 'string', 'regex' => 'string', 'groups' => 'string', 'boards' => 'string',
+        );
+        $in_data = array(
+            $_POST['name'], $_POST['description'], $_POST['enclose'],
+            $_POST['type'], $length, $options, $active, $default,
+            $can_search, $bbc, $mask, $regex, $groups, $boards,
+        );
+        call_integration_hook('integrate_save_post_field', array(&$up_col, &$up_data, &$in_col, &$in_data));
+
+        if ($field) {
+            Database::query('', '
+                UPDATE {db_prefix}message_fields
+                SET
+                    ' . implode(',
+                    ', $up_col) . '
+                WHERE id_field = {int:current_field}',
+                $up_data
+            );
+        } else {
+            Database::insert('',
+                '{db_prefix}message_fields',
+                $in_col,
+                $in_data,
+                array('id_field')
+            );
         }
     }
 
