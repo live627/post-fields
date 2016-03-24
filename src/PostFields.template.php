@@ -49,14 +49,18 @@ function template_edit()
 								<label>
 									<input type="checkbox" class="input_check" onclick="invertAll(this, this.form, \'boards\');"', $context['all_boards_checked'] ? ' checked="checked"' : '', ' /> <em>', $txt['check_all'], '</em></label><br />';
 
-    foreach ($context['boards'] as $id_board => $board_link) {
-        echo '
-								<label>
-									<input type="checkbox" name="boards[', $id_board, ']"', in_array($id_board, $context['field']['boards']) ? ' checked' : '', '>
-									', $board_link, '
-								</label>
-								<br />';
-    }
+					foreach ($context['board_list'] as $id_category => $category) {
+						echo '
+											<strong>', $category['name'], '</strong>
+											<ul class="reset">';
+
+						foreach ($category['boards'] as $board)
+							echo '
+												<li><label><input type="checkbox" name="boards[', $board['id'], ']" class="input_check"', in_array($board['id'], $context['field']['boards']) ? ' checked ' : '', empty($board['child_level']) ?: ' style="margin-' . ($context['right_to_left'] ? 'right' : 'left') . ': ' . $board['child_level'] * 1.5 . 'em;"', '>', $board['name'], '</label></li>';
+
+						echo '
+											</ul>';
+					}
 
     echo '
 							</div>

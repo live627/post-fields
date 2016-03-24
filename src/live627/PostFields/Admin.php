@@ -263,22 +263,8 @@ class Admin extends \Suki\Ohara
         $context['page_title'] = $this->text('title') . ' - ' . ($context['fid'] ? $this->text('edit') : $this->text('add'));
         $context['html_headers'] .= '<script type="text/javascript" src="' . $this->settings['default_theme_url'] . '/scripts/postfieldsadmin.js"></script>';
         loadTemplate('PostFields');
-
-        $request = Database::query('', '
-            SELECT b.id_board, b.name AS board_name, c.name AS cat_name
-            FROM {db_prefix}boards AS b
-                LEFT JOIN {db_prefix}categories AS c ON (c.id_cat = b.id_cat)
-            WHERE redirect = {string:empty_string}',
-            array(
-                'empty_string' => '',
-            )
-        );
-        $context['boards'] = array();
-        while ($row = Database::fetch_assoc($request)) {
-            $context['boards'][$row['id_board']] = $row['cat_name'] . ' - ' . $row['board_name'];
-        }
-        Database::free_result($request);
-
+        require_once($this->sourceDir . '/Subs-MessageIndex.php');
+        $context['board_list'] = getBoardList();
         loadLanguage('Profile');
 
         if ($context['fid']) {
@@ -349,7 +335,10 @@ class Admin extends \Suki\Ohara
         $context['all_groups_checked'] = empty(array_diff_key($context['groups'], array_filter($context['groups'], function($group) {
             return $group['checked'];
         })));
-        $context['all_boards_checked'] = empty(array_diff(array_keys($context['boards']), $context['field']['boards']));
+        $context['all_boards_checked'] = false;
+        foreach ($context['board_list'] as $category)
+            foreach ($category['boards'] as $board)
+                $context['all_boards_checked'] = true *in_array($board['id'], $context['field']['boards']);
 
         // Are we saving?
         if (isset($_POST['save'])) {
