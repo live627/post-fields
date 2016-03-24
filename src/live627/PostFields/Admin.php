@@ -34,24 +34,7 @@ class Admin extends \Suki\Ohara
         // Deleting?
         if (isset($_POST['delete'], $_POST['remove'])) {
             checkSession();
-
-            // Delete the user data first.
-            Database::query('', '
-                DELETE FROM {db_prefix}message_data
-                WHERE id_field IN ({array_int:fields})',
-                array(
-                    'fields' => $_POST['remove'],
-                )
-            );
-            // Finally - the fields themselves are gone!
-            Database::query('', '
-                DELETE FROM {db_prefix}message_fields
-                WHERE id_field IN ({array_int:fields})',
-                array(
-                    'fields' => $_POST['remove'],
-                )
-            );
-            call_integration_hook('integrate_delete_post_fields', array($_POST['remove']));
+            $this->deleteFields($_POST['remove']);
             redirectexit('action=admin;area=postfields');
         }
 
@@ -463,6 +446,28 @@ class Admin extends \Suki\Ohara
             call_integration_hook('integrate_delete_post_field');
             redirectexit('action=admin;area=postfields');
         }
+    }
+
+    public function deleteFields(array $fields)
+    {
+        call_integration_hook('integrate_delete_post_fields', array($_POST['remove']));
+
+        // Delete the user data first.
+        Database::query('', '
+            DELETE FROM {db_prefix}message_data
+            WHERE id_field IN ({array_int:fields})',
+            array(
+                'fields' => $fields,
+            )
+        );
+        // Finally - the fields themselves are gone!
+        Database::query('', '
+            DELETE FROM {db_prefix}message_fields
+            WHERE id_field IN ({array_int:fields})',
+            array(
+                'fields' => $fields,
+            )
+        );
     }
 
     public function process($start, $length, $sort, $list, $listId)
