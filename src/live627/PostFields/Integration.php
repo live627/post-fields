@@ -110,12 +110,13 @@ class Integration
         global $board, $context, $smcFunc, $topic, $user_info;
 
         $field_list = (new Util)->filterFields($board);
-        $changes = $log_changes = array();
+        $changes = $log_changes = $values = array();
+        $value = '';
         $_POST['icon'] = 'xx';
 
         if (isset($_REQUEST['msg'])) {
             $request = $smcFunc['db_query']('', '
-                SELECT *
+                SELECT id_field, value
                 FROM {db_prefix}message_field_data
                 WHERE id_msg = {int:msg}
                     AND id_field IN ({array_int:field_list})',
@@ -124,9 +125,8 @@ class Integration
                     'field_list' => array_keys($field_list),
                 )
             );
-            $values = array();
-            while ($row = $smcFunc['db_fetch_assoc']($request)) {
-                $values[$row['id_field']] = isset($row['value']) ? $row['value'] : '';
+            while ($row = $smcFunc['db_fetch_row']($request)) {
+                $values[$row[0]] = isset($row[1]) ? $row[1] : '';
             }
             $smcFunc['db_free_result']($request);
         }
