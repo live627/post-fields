@@ -124,7 +124,7 @@ class Util extends \Suki\Ohara
     /**
      * Gets all membergroups and filters them according to the parameters.
      *
-     * @param array $checked list of all id_groups to be checked (have a mark in the checkbox).
+     * @param integer[] $checked list of all id_groups to be checked (have a mark in the checkbox).
      * @param array $disallowed list of all id_groups that are skipped. Default is an empty array.
      * @param bool $inherited whether or not to filter out the inherited groups. Default is false.
      * @return array all the membergroups filtered according to the parameters; empty array if something went wrong.
