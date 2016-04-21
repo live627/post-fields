@@ -24,6 +24,7 @@ class Util extends \Suki\Ohara
     public function __construct()
     {
         $this->setRegistry();
+        $this->getFields();
     }
 
     public function getFields()
@@ -51,6 +52,50 @@ class Util extends \Suki\Ohara
             }
         }
         return $list;
+    }
+
+    public function load_fields($fields)
+    {
+        global $board, $context, $options, $smcFunc;
+
+        if (empty($fields)) {
+            return;
+        }
+
+        $value = '';
+        $exists = false;
+        $values = array();
+
+        if (isset($_REQUEST['msg'])) {
+            $request = $smcFunc['db_query']('', '
+                SELECT *
+                    FROM {db_prefix}message_field_data
+                    WHERE id_msg = {int:msg}
+                        AND id_field IN ({array_int:field_list})',
+                array(
+                    'msg' => (int) $_REQUEST['msg'],
+                    'field_list' => array_keys($fields),
+                )
+            );
+            while ($row = $smcFunc['db_fetch_assoc']($request)) {
+                $values[$row['id_field']] = isset($row['value']) ? $row['value'] : '';
+            }
+            $smcFunc['db_free_result']($request);
+        }
+        foreach ($fields as $field) {
+            // If this was submitted already then make the value the posted version.
+            if (isset($_POST['postfield'], $_POST['postfield'][$field['id_field']])) {
+                $value = $smcFunc['htmlspecialchars']($_POST['postfield'][$field['id_field']]);
+                if (in_array($field['type'], array('select', 'radio'))) {
+                    $value = ($options = explode(',', $field['options'])) && isset($options[$value]) ? $options[$value] : '';
+                }
+            }
+            if (isset($values[$field['id_field']])) {
+                $value = $values[$field['id_field']];
+            }
+            $exists = !empty($value);
+            yield $this->renderField($field, $value, $exists);
+        }
     }
 
     public function filterFields($board, $is_message_index = false)
@@ -82,7 +127,7 @@ class Util extends \Suki\Ohara
     {
         global $scripturl, $settings, $sourcedir;
 
-        require_once($sourcedir . '/Class-PostFields.php');
+        require_once(__DIR__ . '/Class-PostFields.php');
         $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
         if (!class_exists($class_name)) {
             fatal_error('Param "' . $field['type'] . '" not found for field "' . $field['name'] . '" at ID #' . $field['id_field'] . '.', false);

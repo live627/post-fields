@@ -47,51 +47,7 @@ class Integration
         $loader->addNamespace('ModHelper', $sourcedir . '/PostFields/ModHelper');
         $loader->addNamespace('live627', $sourcedir . '/PostFields/live627');
         $loader->addNamespace('Suki', $sourcedir . '/PostFields/Suki');
-    }
-
-    public static function load_fields($fields)
-    {
-        global $board, $context, $options, $smcFunc;
-
-        if (empty($fields)) {
-            return;
-        }
-
-        $context['fields'] = array();
-        $value = '';
-        $exists = false;
-
-        if (isset($_REQUEST['msg'])) {
-            $request = $smcFunc['db_query']('', '
-                SELECT *
-                    FROM {db_prefix}message_field_data
-                    WHERE id_msg = {int:msg}
-                        AND id_field IN ({array_int:field_list})',
-                array(
-                    'msg' => (int) $_REQUEST['msg'],
-                    'field_list' => array_keys($fields),
-                )
-            );
-            $values = array();
-            while ($row = $smcFunc['db_fetch_assoc']($request)) {
-                $values[$row['id_field']] = isset($row['value']) ? $row['value'] : '';
-            }
-            $smcFunc['db_free_result']($request);
-        }
-        foreach ($fields as $field) {
-            // If this was submitted already then make the value the posted version.
-            if (isset($_POST['postfield'], $_POST['postfield'][$field['id_field']])) {
-                $value = $smcFunc['htmlspecialchars']($_POST['postfield'][$field['id_field']]);
-                if (in_array($field['type'], array('select', 'radio'))) {
-                    $value = ($options = explode(',', $field['options'])) && isset($options[$value]) ? $options[$value] : '';
-                }
-            }
-            if (isset($values[$field['id_field']])) {
-                $value = $values[$field['id_field']];
-            }
-            $exists = !empty($value);
-            $context['fields'][] = (new Util)->renderField($field, $value, $exists);
-        }
+        $loader->addNamespace('Symfony\\Component\\Yaml', $sourcedir . '/PostFields/symfony/yaml');
     }
 
     public static function post_form()
@@ -99,7 +55,7 @@ class Integration
         global $board, $context, $options, $user_info;
 
         $util = new Util();
-        self::load_fields($util->filterFields($board));
+        $context['fields'] = $util->load_fields($util->filterFields($board));
         loadLanguage('PostFields');
         loadTemplate('PostFields');
         $context['is_post_fields_collapsed'] = $user_info['is_guest'] ? !empty($_COOKIE['postFields']) : !empty($options['postFields']);
