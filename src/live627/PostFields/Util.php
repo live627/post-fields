@@ -29,29 +29,25 @@ class Util extends \Suki\Ohara
 
     public function getFields()
     {
-        global $smcFunc;
-
         if (empty($this->fields)) {
-            $request = $smcFunc['db_query']('', '
-				SELECT *
-				FROM {db_prefix}message_fields');
-            while ($row = $smcFunc['db_fetch_assoc']($request)) {
+            $request = Database::query('', '
+                SELECT *
+                FROM {db_prefix}message_fields');
+            while ($row = Database::fetch_assoc($request)) {
                 $this->fields[$row['id_field']] = $row;
             }
-            $smcFunc['db_free_result']($request);
+            Database::free_result($request);
         }
         return $this->fields;
     }
 
     public function getFieldsSearchable()
     {
-        $list = array();
-        foreach ($this->fields as $field) {
+        foreach ($this->fields as $id_field => $field) {
             if ($field['can_search'] == 'yes') {
-                $list[$field['id_field']] = $field;
+                yield $id_field => $field;
             }
         }
-        return $list;
     }
 
     public function load_fields($fields)
@@ -90,20 +86,19 @@ class Util extends \Suki\Ohara
                     $value = ($options = explode(',', $field['options'])) && isset($options[$value]) ? $options[$value] : '';
                 }
             }
-            if (isset($values[$field['id_field']])) {
-                $value = $values[$field['id_field']];
+            if (isset($values[$id_field])) {
+                $value = $values[$id_field];
             }
             $exists = !empty($value);
             yield $this->renderField($field, $value, $exists);
         }
     }
 
-    public function filterFields($board, $is_message_index = false)
+    public function filterFields($board)
     {
-        global $context, $user_info;
+        global $user_info;
 
-        $list = array();
-        foreach ($this->fields as $field) {
+        foreach ($this->fields as $id_field => $field) {
             $board_list = array_flip(explode(',', $field['boards']));
             if (!isset($board_list[$board])) {
                 continue;
@@ -115,9 +110,8 @@ class Util extends \Suki\Ohara
                 continue;
             }
 
-            $list[$field['id_field']] = $field;
+            yield $id_field => $field;
         }
-        return $list;
     }
 
     /**
@@ -215,19 +209,19 @@ class Util extends \Suki\Ohara
         }
 
         // Load membergroups.
-        $request = $smcFunc['db_query']('', '
-			SELECT group_name, id_group, min_posts, online_color
-			FROM {db_prefix}membergroups
-			WHERE id_group > {int:is_zero}' . (!$inherited ? '
-				AND id_parent = {int:not_inherited}' : '') . (!$inherited && empty($modSettings['permission_enable_postgroups']) ? '
-				AND min_posts = {int:min_posts}' : ''),
+        $request = Database::query('', '
+            SELECT group_name, id_group, min_posts, online_color
+            FROM {db_prefix}membergroups
+            WHERE id_group > {int:is_zero}' . (!$inherited ? '
+                AND id_parent = {int:not_inherited}' : '') . (!$inherited && empty($modSettings['permission_enable_postgroups']) ? '
+                AND min_posts = {int:min_posts}' : ''),
             array(
                 'is_zero' => 0,
                 'not_inherited' => -2,
                 'min_posts' => -1,
             )
         );
-        while ($row = $smcFunc['db_fetch_assoc']($request)) {
+        while ($row = Database::fetch_assoc($request)) {
             if (!in_array($row['id_group'], $disallowed)) {
                 $groups[(int) $row['id_group']] = array(
                     'id' => $row['id_group'],
@@ -238,7 +232,7 @@ class Util extends \Suki\Ohara
                 );
             }
         }
-        $smcFunc['db_free_result']($request);
+        Database::free_result($request);
 
         asort($groups);
 

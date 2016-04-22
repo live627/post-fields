@@ -10,6 +10,8 @@
 
 namespace live627\PostFields;
 
+use \ModHelper\Database;
+
 if (!defined('SMF')) {
     die('Hacking attempt...');
 }
@@ -47,7 +49,6 @@ class Integration
         $loader->addNamespace('ModHelper', $sourcedir . '/PostFields/ModHelper');
         $loader->addNamespace('live627', $sourcedir . '/PostFields/live627');
         $loader->addNamespace('Suki', $sourcedir . '/PostFields/Suki');
-        $loader->addNamespace('Symfony\\Component\\Yaml', $sourcedir . '/PostFields/symfony/yaml');
     }
 
     public static function post_form()
@@ -63,7 +64,7 @@ class Integration
 
     public static function after($msgOptions, $topicOptions)
     {
-        global $board, $context, $smcFunc, $topic, $user_info;
+        global $board, $modSettings, $topic, $user_info;
 
         $field_list = (new Util)->filterFields($board);
         $changes = $log_changes = $values = array();
@@ -96,9 +97,9 @@ class Integration
                     'current_topic' => $topic,
                 )
             );
-            list ($topic_value) = $smcFunc['db_fetch_row']($request);
+            list ($topic_value) = Database::fetch_row($request);
             $topic_value = $topic_value != $_REQUEST['msg'];
-            $smcFunc['db_free_result']($request);
+            Database::free_result($request);
         }
         foreach ($field_list as $field) {
             if ((empty($topic) || empty($topic_value)) && $field['topic_only'] == 'yes') {
@@ -128,7 +129,7 @@ class Integration
         }
 
         if (!empty($changes)) {
-            $smcFunc['db_insert']('replace',
+            Database::insert('replace',
                 '{db_prefix}message_field_data',
                 array('id_field' => 'int', 'value' => 'string', 'id_msg' => 'int'),
                 $changes,
@@ -136,7 +137,7 @@ class Integration
             );
 
             if (!empty($log_changes) && !empty($modSettings['modlog_enabled'])) {
-                $smcFunc['db_insert']('',
+                Database::insert('',
                     '{db_prefix}log_actions',
                     array(
                         'action' => 'string', 'id_log' => 'int', 'log_time' => 'int', 'id_member' => 'int', 'ip' => 'string-16',
@@ -151,7 +152,7 @@ class Integration
 
     public static function post_post_validate(&$post_errors, $posterIsGuest)
     {
-        global $board, $context, $sourcedir, $smcFunc, $topic;
+        global $board, $smcFunc, $topic;
 
         foreach ($post_errors as $id => $post_error) {
             if ($post_error == 'no_message') {
@@ -164,11 +165,11 @@ class Integration
         }
 
         $field_list = (new Util)->filterFields($board);
-        require_once($sourcedir . '/Class-PostFields.php');
+        require_once(__DIR__ . '/Class-PostFields.php');
         loadLanguage('PostFields');
 
         if (isset($topic)) {
-            $request = $smcFunc['db_query']('', '
+            $request = Database::query('', '
                 SELECT id_first_msg
                 FROM {db_prefix}topics
                 WHERE id_topic = {int:current_topic}',
@@ -176,9 +177,9 @@ class Integration
                     'current_topic' => $topic,
                 )
             );
-            list ($topic_value) = $smcFunc['db_fetch_row']($request);
+            list ($topic_value) = Database::fetch_row($request);
             $topic_value = $topic_value != $_REQUEST['msg'];
-            $smcFunc['db_free_result']($request);
+            Database::free_result($request);
         }
         foreach ($field_list as $field) {
             if ((empty($topic) || empty($topic_value)) && $field['topic_only'] == 'yes') {
@@ -207,7 +208,7 @@ class Integration
         global $smcFunc;
 
         if (!empty($messages)) {
-            $smcFunc['db_query']('', '
+            Database::query('', '
                 DELETE FROM {db_prefix}message_field_data
                 WHERE id_msg IN ({array_int:message_list})',
                 array(
@@ -222,7 +223,7 @@ class Integration
         global $smcFunc;
 
         $messages = array();
-        $request = $smcFunc['db_query']('', '
+        $request = Database::query('', '
             SELECT id_msg
             FROM {db_prefix}messages
             WHERE id_topic IN ({array_int:topics})',
@@ -230,11 +231,11 @@ class Integration
                 'topics' => $topics,
             )
         );
-        while ($row = $smcFunc['db_fetch_assoc']($request)) {
+        while ($row = Database::fetch_assoc($request)) {
             $messages[] = $row['id_msg'];
         }
 
-        $smcFunc['db_free_result']($request);
+        Database::free_result($request);
 
         if (!empty($messages)) {
             self::remove_messages($messages, $decreasePostCount);
@@ -250,7 +251,7 @@ class Integration
         }
 
         $messages = array();
-        $request = $smcFunc['db_query']('', '
+        $request = Database::query('', '
             SELECT id_first_msg
             FROM {db_prefix}topics
             WHERE id_topic IN ({array_int:topics})',
@@ -258,11 +259,11 @@ class Integration
                 'topics' => $topic_ids,
             )
         );
-        while ($row = $smcFunc['db_fetch_row']($request)) {
+        while ($row = Database::fetch_row($request)) {
             $messages[] = $row[0];
         }
 
-        $smcFunc['db_free_result']($request);
+        Database::free_result($request);
 
         if (!empty($messages)) {
             self::display_message_list($messages, true);
@@ -280,7 +281,7 @@ class Integration
             return;
         }
 
-        $request = $smcFunc['db_query']('', '
+        $request = Database::query('', '
             SELECT *
             FROM {db_prefix}message_field_data
             WHERE id_msg IN ({array_int:message_list})
@@ -291,13 +292,13 @@ class Integration
             )
         );
         $context['fields'] = array();
-        while ($row = $smcFunc['db_fetch_assoc']($request)) {
+        while ($row = Database::fetch_assoc($request)) {
             $exists = isset($row['value']);
             $value = $exists ? $row['value'] : '';
 
             $context['fields'][$row['id_msg']][$row['id_field']] = $util->renderField($field_list[$row['id_field']], $value, $exists);
         }
-        $smcFunc['db_free_result']($request);
+        Database::free_result($request);
 
         if (!empty($context['fields'])) {
             loadLanguage('PostFields');
