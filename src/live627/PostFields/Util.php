@@ -50,35 +50,40 @@ class Util extends \Suki\Ohara
         }
     }
 
-    public function load_fields($fields)
+    public function getFieldValues($id_msg,  $field_list)
+    {
+        $request = Database::query('', '
+            SELECT id_field, value
+                FROM {db_prefix}message_field_data
+                WHERE id_msg = {int:msg}
+                    AND id_field IN ({array_int:field_list})',
+            array(
+                'msg' => (int) $id_msg,
+                'field_list' => array_keys($fields),
+            )
+        );
+        $values = array();
+        while (list ($id_field, $value) = Database::fetch_row($request)) {
+            $values[$id_field] = isset($value) ? $value : '';
+        }
+        Database::free_result($request);
+
+        return $values;
+    }
+
+    public function load_fields(\Generator $fields)
     {
         global $board, $context, $options, $smcFunc;
 
         if (empty($fields)) {
             return;
         }
-
+        if (isset($_REQUEST['msg'])) {
+            $values = $this->getFieldValues($_REQUEST['msg'], array_keys($fields));
+        }
         $value = '';
         $exists = false;
-        $values = array();
-
-        if (isset($_REQUEST['msg'])) {
-            $request = $smcFunc['db_query']('', '
-                SELECT *
-                    FROM {db_prefix}message_field_data
-                    WHERE id_msg = {int:msg}
-                        AND id_field IN ({array_int:field_list})',
-                array(
-                    'msg' => (int) $_REQUEST['msg'],
-                    'field_list' => array_keys($fields),
-                )
-            );
-            while ($row = $smcFunc['db_fetch_assoc']($request)) {
-                $values[$row['id_field']] = isset($row['value']) ? $row['value'] : '';
-            }
-            $smcFunc['db_free_result']($request);
-        }
-        foreach ($fields as $field) {
+        foreach ($fields as $id_field => $field) {
             // If this was submitted already then make the value the posted version.
             if (isset($_POST['postfield'], $_POST['postfield'][$field['id_field']])) {
                 $value = $smcFunc['htmlspecialchars']($_POST['postfield'][$field['id_field']]);

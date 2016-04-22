@@ -72,24 +72,11 @@ class Integration
         $_POST['icon'] = 'xx';
 
         if (isset($_REQUEST['msg'])) {
-            $request = $smcFunc['db_query']('', '
-                SELECT id_field, value
-                FROM {db_prefix}message_field_data
-                WHERE id_msg = {int:msg}
-                    AND id_field IN ({array_int:field_list})',
-                array(
-                    'msg' => (int) $_REQUEST['msg'],
-                    'field_list' => array_keys($field_list),
-                )
-            );
-            while ($row = $smcFunc['db_fetch_row']($request)) {
-                $values[$row[0]] = isset($row[1]) ? $row[1] : '';
-            }
-            $smcFunc['db_free_result']($request);
+            $values = $this->getFieldValues($_REQUEST['msg'], array_keys($field_list));
         }
 
         if (isset($topic)) {
-            $request = $smcFunc['db_query']('', '
+            $request = Database::query('', '
                 SELECT id_first_msg
                 FROM {db_prefix}topics
                 WHERE id_topic = {int:current_topic}',
