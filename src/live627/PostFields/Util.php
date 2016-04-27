@@ -50,7 +50,7 @@ class Util extends \Suki\Ohara
         }
     }
 
-    public function getFieldValues($id_msg,  $field_list)
+    public function getFieldValues($id_msg, \Generator $field_list)
     {
         $request = Database::query('', '
             SELECT id_field, value
@@ -59,7 +59,7 @@ class Util extends \Suki\Ohara
                     AND id_field IN ({array_int:field_list})',
             array(
                 'msg' => (int) $id_msg,
-                'field_list' => array_keys($fields),
+                'field_list' => $this->keys($fields),
             )
         );
         $values = array();
@@ -79,7 +79,7 @@ class Util extends \Suki\Ohara
             return;
         }
         if (isset($_REQUEST['msg'])) {
-            $values = $this->getFieldValues($_REQUEST['msg'], array_keys($fields));
+            $values = $this->getFieldValues($_REQUEST['msg'], $fields);
         }
         $value = '';
         $exists = false;
@@ -117,6 +117,15 @@ class Util extends \Suki\Ohara
 
             yield $id_field => $field;
         }
+    }
+
+    public function keys(\Generator $fields)
+    {
+        $retVal = [];
+        foreach ($fields as $id_field => $field) {
+            $retVal[] = $id_field;
+        }
+        return $retVal;
     }
 
     /**
@@ -168,7 +177,7 @@ class Util extends \Suki\Ohara
     /**
      * Gets all membergroups and filters them according to the parameters.
      *
-     * @param integer[] $checked list of all id_groups to be checked (have a mark in the checkbox).
+     * @param array $checked list of all id_groups to be checked (have a mark in the checkbox).
      * @param array $disallowed list of all id_groups that are skipped. Default is an empty array.
      * @param bool $inherited whether or not to filter out the inherited groups. Default is false.
      * @return array all the membergroups filtered according to the parameters; empty array if something went wrong.

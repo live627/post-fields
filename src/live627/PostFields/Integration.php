@@ -275,7 +275,7 @@ class Integration
                 AND id_field IN ({array_int:field_list})',
             array(
                 'message_list' => $messages,
-                'field_list' => array_keys($field_list),
+                'field_list' => $util->keys($field_list),
             )
         );
         $context['fields'] = array();
