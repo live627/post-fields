@@ -318,10 +318,10 @@ class Admin extends \Suki\Ohara
         $context['all_groups_checked'] = empty(array_diff_key($context['groups'], array_filter($context['groups'], function($group) {
             return $group['checked'];
         })));
-        $context['all_boards_checked'] = false;
+        $context['all_boards_checked'] = true;
         foreach ($context['board_list'] as $category)
             foreach ($category['boards'] as $board)
-                $context['all_boards_checked'] = true *in_array($board['id'], $context['field']['boards']);
+                $context['all_boards_checked'] &= in_array($board['id'], $context['field']['boards']);
 
         // Are we saving?
         if (isset($_POST['save'])) {
