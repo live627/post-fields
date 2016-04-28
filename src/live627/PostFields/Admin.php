@@ -439,7 +439,7 @@ class Admin extends \Suki\Ohara
 
     public function deleteFields(array $fields)
     {
-        call_integration_hook('integrate_delete_post_fields', array($_POST['remove']));
+        call_integration_hook('integrate_delete_post_fields', array($fields));
 
         // Delete the user data first.
         Database::query('', '
