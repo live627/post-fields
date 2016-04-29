@@ -15,9 +15,15 @@
       "role": "Developer"
     }
   ],
+  "repositories": [
+    {
+      "url": "https://github.com/live627/ModHelper.git",
+      "type": "git"
+    }
+  ],
   "require": {
     "php": ">=5.5.0",
-    "suki/ohara": "~1.0"
+    "live627/ModHelper": "dev-master"
   },
   "autoload": {
     "psr-4": {
