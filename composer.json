@@ -23,7 +23,7 @@
   ],
   "require": {
     "php": ">=5.5.0",
-    "live627/ModHelper": "dev-master"
+    "ModHelper": "dev-master"
   },
   "autoload": {
     "psr-4": {
