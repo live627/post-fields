@@ -18,7 +18,7 @@
   "repositories": [
     {
       "url": "https://github.com/live627/ModHelper.git",
-      "type": "git"
+      "type": "vcs"
     }
   ],
   "require": {
