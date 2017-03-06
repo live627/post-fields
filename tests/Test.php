@@ -21,7 +21,7 @@ function call_integration_hook($hook, $parameters = array())
  */
 function fatal_error($msg, $log)
 {
-    die($msg);
+    echo $msg;
 }
 
 class MockUtil extends live627\PostFields\Util
@@ -153,11 +153,37 @@ class Test extends PHPUnit_Framework_TestCase
         $this->assertCount(2, $actual);
     }
 
-    public function testFieldErrors()
+    public function testFieldHasNoErrors()
     {
         foreach ($this->loader->getFields() as $field) {
             $field['class']->validate();
             $this->assertFalse($field['class']->getError());
+        }
+    }
+
+    public function testFieldHasErrors()
+    {
+        foreach ($this->loader->getFields() as $field) {
+            if ($field['type'] == 'text' || $field['type'] == 'select') {
+                $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
+                $field['class'] = new $class_name($field, 'some<br>m<a>rkup</a>', true);
+                $field['class']->validate();
+                $this->assertCount(2, $field['class']->getError());
+            }
+        }
+    }
+
+    public function testInvalidMask()
+    {
+        foreach ($this->loader->getFields() as $field) {
+            if ($field['type'] == 'text') {
+                $class_name = '\\live627\\PostFields\\postFields_' . $field['type'];
+                $field['mask'] .= 'INV';
+                $field['class'] = new $class_name($field, 'some<br>m<a>rkup</a>', true);
+                $field['class']->validate();
+                $this->assertContains('Mask', $this->getActualOutput());
+                break;
+            }
         }
     }
 

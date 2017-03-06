@@ -205,12 +205,12 @@ class postFields_text extends postFieldsBase
         $class_name = '\\live627\\PostFields\\postFieldMask_' . $this->field['mask'];
         if (!class_exists($class_name)) {
             fatal_error('Mask "' . $this->field['mask'] . '" not found for field "' . $this->field['name'] . '" at ID #' . $this->field['id_field'] . '.', false);
-        }
-
-        $mask = new $class_name($this->value, $this->field);
-        $mask->validate();
-        if (false !== ($err = $mask->getError())) {
-            $this->err = $err;
+        } else {
+            $mask = new $class_name($this->value, $this->field);
+            $mask->validate();
+            if (false !== ($err = $mask->getError())) {
+                $this->err = $err;
+            }
         }
     }
 }
