@@ -10,10 +10,6 @@
 
 namespace live627\PostFields;
 
-if (!defined('SMF')) {
-    die('Hacking attempt...');
-}
-
 class Dispatcher extends \Suki\Ohara
 {
     public $name = 'PostFields';

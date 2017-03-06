@@ -12,10 +12,6 @@ namespace live627\PostFields;
 
 use \ModHelper\Database;
 
-if (!defined('SMF')) {
-    die('Hacking attempt...');
-}
-
 class Util extends \Suki\Ohara
 {
     public $name = __CLASS__;

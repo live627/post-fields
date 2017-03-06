@@ -10,10 +10,6 @@
 
 namespace live627\PostFields;
 
-if (!defined('SMF')) {
-    die('Hacking attempt...');
-}
-
 interface postFields
 {
     /*
@@ -322,5 +318,3 @@ class postFieldMask_nohtml extends postFieldMaskBase
         }
     }
 }
-
-?>

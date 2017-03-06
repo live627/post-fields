@@ -12,10 +12,6 @@ namespace live627\PostFields;
 
 use \ModHelper\Database;
 
-if (!defined('SMF')) {
-    die('Hacking attempt...');
-}
-
 class Integration
 {
     public static function admin_areas(&$admin_areas)
